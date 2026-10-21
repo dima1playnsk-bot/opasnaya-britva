@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dima1playnsk-bot.github.io/opasnaya-britva/sitemap.xml
