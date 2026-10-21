@@ -532,3 +532,6 @@ button, a, summary, label { touch-action: manipulation; }
 .field input:-webkit-autofill, .field input:-webkit-autofill:hover, .field input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--text); -webkit-box-shadow: 0 0 0 1000px var(--card) inset; caret-color: var(--text);
 }
+
+/* ловушка для спам-ботов — скрыта от людей */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }

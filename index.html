@@ -442,6 +442,11 @@
           <label for="bkComment">Комментарий <span class="optional">необязательно</span></label>
           <textarea id="bkComment" name="comment" rows="2" placeholder="Например, оставить длину сверху…"></textarea>
         </div>
+        <!-- ловушка для спам-ботов: люди это поле не видят и не заполняют -->
+        <div class="hp" aria-hidden="true">
+          <label for="bkWebsite">Сайт</label>
+          <input id="bkWebsite" name="website" type="text" tabindex="-1" autocomplete="off">
+        </div>
         <label class="check">
           <input type="checkbox" id="bkAgree" required>
           <span>Согласен на обработку персональных данных по <a href="#" class="check__link">политике конфиденциальности</a></span>

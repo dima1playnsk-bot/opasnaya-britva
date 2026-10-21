@@ -464,24 +464,38 @@ function validate(which) {
   return res.every(Boolean);
 }
 
-/* Отправка заявки.
-   Сейчас запись сохраняется только в браузере (демо).
-   Сюда позже подключим Telegram-бота: функция отправит заявку администратору.
+/* Отправка заявки: сайт → обработчик на Vercel (api/booking.js) → Telegram администратору.
+   Токен бота НЕЛЬЗЯ класть в этот файл, его увидит любой посетитель, — он лежит только в настройках Vercel.
+   Пока адрес обработчика пустой, сайт работает в демо-режиме: запись сохраняется только в браузере. */
+const BOOKING_ENDPOINT = '';
 
-   Важно: токен бота НЕЛЬЗЯ класть в этот файл, его увидит любой посетитель.
-   Схема: сайт → свой серверный обработчик (например, функция на Vercel) → Telegram.
-   Тогда здесь будет примерно так:
-     const r = await fetch('/api/booking', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(booking) });
-     return { ok: r.ok };  */
-async function sendBooking(booking) {
+function saveLocally(booking) {
   try {
     const list = loadBookings();
     list.push(booking);
     localStorage.setItem(BOOKINGS_KEY, JSON.stringify(list));
   } catch (_) { /* приватный режим: просто не сохраняем */ }
   rebuildOwnBusy();
-  await new Promise(r => setTimeout(r, 900));
-  return { ok: true };
+}
+
+async function sendBooking(booking) {
+  if (!BOOKING_ENDPOINT) {
+    saveLocally(booking);
+    await new Promise(r => setTimeout(r, 900));
+    return { ok: true };
+  }
+  try {
+    const r = await fetch(BOOKING_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...booking, website: $('#bkWebsite').value }),
+    });
+    if (!r.ok) return { ok: false };
+    saveLocally(booking);
+    return { ok: true };
+  } catch (_) {
+    return { ok: false };
+  }
 }
 
 let lastBooking = null;
