@@ -6,14 +6,16 @@
   <title>Барбершоп «Опасная бритва» — мужские стрижки и бритьё в Новосибирске</title>
   <meta name="description" content="Мужские стрижки, фейды, борода и королевское бритьё опасной бритвой в центре Новосибирска. Онлайн-запись за минуту, коррекция стрижки 7 дней бесплатно.">
   <meta name="theme-color" content="#0E0D0C">
+  <!-- Барбершоп вымышленный: не показываем его в поиске как настоящую организацию -->
+  <meta name="robots" content="noindex, follow">
   <meta name="color-scheme" content="dark">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="canonical" href="https://dima1playnsk-bot.github.io/opasnaya-britva/">
 
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ru_RU">
-  <meta property="og:title" content="Барбершоп «Опасная бритва», Новосибирск">
-  <meta property="og:description" content="Стрижка по записи минута в минуту, бритьё опасной бритвой, 7 дней бесплатной коррекции.">
+  <meta property="og:title" content="«Опасная бритва» — демо-сайт барбершопа">
+  <meta property="og:description" content="Концепт-сайт вымышленного барбершопа с онлайн-записью в 4 шага.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1200&h=630&fit=crop&q=80">
   <meta name="twitter:card" content="summary_large_image">
 
@@ -108,8 +110,9 @@
     <div class="container header__inner">
       <a class="logo" href="#top" aria-label="Опасная бритва, на главную">
         <img src="favicon.svg" width="36" height="36" alt="">
-        <span class="logo__text">Опасная<br>бритва</span>
+        <span class="logo__text" translate="no">Опасная<br>бритва</span>
       </a>
+      <a class="demo-badge" href="#demo-note" title="Барбершоп вымышленный: имена, отзывы и адрес придуманы">Демо-сайт</a>
       <nav class="nav" id="nav" aria-label="Основное меню">
         <a href="#services">Услуги и цены</a>
         <a href="#barbers">Барберы</a>
@@ -135,11 +138,11 @@
              srcset="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=70&auto=format&fit=crop 800w,
                      https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1280&q=72&auto=format&fit=crop 1280w,
                      https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=75&auto=format&fit=crop 1920w"
-             sizes="100vw" alt="" fetchpriority="high">
+             sizes="100vw" width="1920" height="1280" alt="" fetchpriority="high">
       </div>
       <div class="container hero__inner">
         <div class="hero__content">
-          <p class="eyebrow"><span class="status" id="openStatus">Ежедневно 10:00–22:00</span> · Новосибирск, центр</p>
+          <p class="eyebrow"><span class="status" id="openStatus">Ежедневно 10:00–22:00</span><span>Новосибирск, ул.&nbsp;Цирюльная,&nbsp;7</span></p>
           <h1 class="hero__title">Стрижка, которая держит форму до&nbsp;следующего визита</h1>
           <p class="hero__lead">Стрижём по записи минута в минуту и бреем опасной бритвой с горячим полотенцем. Если через неделю что-то не понравится, поправим бесплатно.</p>
           <div class="hero__cta">
@@ -149,87 +152,79 @@
             <a class="btn btn--ghost btn--lg" href="#services">Цены на услуги</a>
           </div>
           <ul class="hero__trust">
-            <li><span class="stars" aria-hidden="true">★★★★★</span> <b>4,9</b> · 870 отзывов на Яндекс Картах</li>
-            <li><b>−15%</b> на первый визит при онлайн-записи</li>
+            <li><span class="stars" aria-hidden="true">★★★★★</span> <b>4,9</b> на Яндекс Картах</li>
+            <li><b>−15%</b> на первую стрижку онлайн</li>
           </ul>
         </div>
 
         <aside class="slot-card" aria-live="polite">
-          <p class="slot-card__label">Ближайшее свободное время</p>
-          <p class="slot-card__time" id="nearestSlot">сегодня</p>
-          <p class="slot-card__meta" id="nearestMeta">Мужская стрижка · 60 мин</p>
-          <button class="btn btn--gold btn--block" type="button" id="nearestBtn">Занять это время</button>
-          <p class="slot-card__note">Подтверждение придёт на телефон</p>
+          <div id="slotDefault">
+            <p class="slot-card__label">Ближайшее свободное время</p>
+            <p class="slot-card__time" id="nearestSlot">сегодня</p>
+            <p class="slot-card__meta" id="nearestMeta">Мужская стрижка, 60&nbsp;минут</p>
+            <button class="btn btn--gold btn--block" type="button" id="nearestBtn">Занять это время</button>
+            <p class="slot-card__note">Онлайн-запись работает круглосуточно</p>
+          </div>
+          <div id="myBooking" hidden>
+            <p class="slot-card__label">Вы записаны</p>
+            <p class="slot-card__time" id="myTime"></p>
+            <p class="slot-card__meta" id="myMeta"></p>
+            <button class="btn btn--ghost btn--block" type="button" id="myCancel">Отменить запись</button>
+            <p class="slot-card__note">Перенести время можно по телефону или в Telegram</p>
+          </div>
         </aside>
       </div>
     </section>
 
-    <!-- STATS -->
-    <section class="stats" aria-label="Коротко о нас">
-      <div class="container stats__grid">
-        <div class="stat"><b>с 2019</b><span>стрижём в центре Новосибирска</span></div>
-        <div class="stat"><b>4 мастера</b><span>стаж от 3 до 11 лет</span></div>
-        <div class="stat"><b>38 000+</b><span>стрижек и бритья</span></div>
-        <div class="stat"><b>72%</b><span>гостей возвращаются</span></div>
-      </div>
-    </section>
+    <div class="pole" aria-hidden="true"></div>
 
     <!-- WHY -->
     <section class="section" id="why">
       <div class="container">
-        <header class="section__head reveal">
-          <p class="kicker">Почему к нам возвращаются</p>
-          <h2>Четыре правила, которые мы не нарушаем</h2>
-        </header>
-        <div class="why">
-          <article class="why__item reveal">
-            <svg class="ic ic--lg"><use href="#i-clock"/></svg>
+        <h2 class="section__title">Четыре правила, которые мы не нарушаем</h2>
+        <ul class="rules">
+          <li>
+            <svg class="ic ic--lg" aria-hidden="true"><use href="#i-clock"/></svg>
             <h3>Минута в минуту</h3>
-            <p>Если мастер задержал начало больше чем на 10 минут, укладка или камуфляж седины за наш счёт.</p>
-          </article>
-          <article class="why__item reveal">
-            <svg class="ic ic--lg"><use href="#i-redo"/></svg>
+            <p>Если мастер задержал начало больше чем на&nbsp;10&nbsp;минут, укладка за&nbsp;наш счёт.</p>
+          </li>
+          <li>
+            <svg class="ic ic--lg" aria-hidden="true"><use href="#i-redo"/></svg>
             <h3>7 дней на коррекцию</h3>
-            <p>Чёлка легла не так или виски кажутся высокими? Приходите в течение недели, исправим без оплаты.</p>
-          </article>
-          <article class="why__item reveal">
-            <svg class="ic ic--lg"><use href="#i-shield"/></svg>
+            <p>Что-то легло не так? Приходите в течение недели, поправим бесплатно.</p>
+          </li>
+          <li>
+            <svg class="ic ic--lg" aria-hidden="true"><use href="#i-shield"/></svg>
             <h3>Стерильный инструмент</h3>
-            <p>Ножницы и бритвы проходят сухожар. Крафт-пакет с инструментом мастер вскрывает при вас.</p>
-          </article>
-          <article class="why__item reveal">
-            <svg class="ic ic--lg"><use href="#i-sparkles"/></svg>
-            <h3>Укладка за 3 минуты дома</h3>
-            <p>В конце визита покажем, как уложить волосы самому и каким средством, чтобы утром не мучиться.</p>
-          </article>
-        </div>
+            <p>Ножницы и бритвы после сухожара, крафт-пакет мастер вскрывает при вас.</p>
+          </li>
+          <li>
+            <svg class="ic ic--lg" aria-hidden="true"><use href="#i-sparkles"/></svg>
+            <h3>Укладка дома за 3 минуты</h3>
+            <p>В конце визита покажем, как уложить волосы самому и каким средством.</p>
+          </li>
+        </ul>
       </div>
     </section>
 
     <!-- SERVICES -->
     <section class="section section--alt" id="services">
       <div class="container">
-        <header class="section__head reveal">
-          <p class="kicker">Услуги и цены</p>
-          <h2>Цены без «от» и звёздочек</h2>
-          <p class="section__lead">Стоимость зависит от категории мастера. Топ-барберы стригут больше 8 лет и обучают новых мастеров.</p>
+        <header class="section__head">
+          <h2 class="section__title">Цены без «от» и звёздочек</h2>
+          <p class="section__lead">У каждой услуги две цены: у барбера и у топ-барбера со стажем больше 8&nbsp;лет.</p>
         </header>
-
-        <div class="services__controls reveal">
-          <div class="tabs" role="tablist" aria-label="Категории услуг" id="serviceTabs">
-            <button role="tab" aria-selected="true" data-cat="all" aria-controls="priceList">Все</button>
-            <button role="tab" aria-selected="false" data-cat="hair" aria-controls="priceList">Стрижки</button>
-            <button role="tab" aria-selected="false" data-cat="beard" aria-controls="priceList">Борода и бритьё</button>
-            <button role="tab" aria-selected="false" data-cat="combo" aria-controls="priceList">Комплексы</button>
-            <button role="tab" aria-selected="false" data-cat="kids" aria-controls="priceList">Детям</button>
-          </div>
-          <div class="tier" role="radiogroup" aria-label="Категория мастера">
-            <button role="radio" aria-checked="true" data-tier="0">Барбер</button>
-            <button role="radio" aria-checked="false" data-tier="1">Топ-барбер</button>
-          </div>
+        <div class="tabs" role="tablist" aria-label="Категории услуг" id="serviceTabs">
+          <button role="tab" aria-selected="true" data-cat="all" aria-controls="priceList">Все</button>
+          <button role="tab" aria-selected="false" data-cat="hair" aria-controls="priceList">Стрижки</button>
+          <button role="tab" aria-selected="false" data-cat="beard" aria-controls="priceList">Борода и бритьё</button>
+          <button role="tab" aria-selected="false" data-cat="combo" aria-controls="priceList">Комплексы</button>
+          <button role="tab" aria-selected="false" data-cat="kids" aria-controls="priceList">Детям</button>
         </div>
-
-        <ul class="price-list" id="priceList" role="tabpanel" aria-labelledby="serviceTabs"></ul>
+        <div class="prices" role="tabpanel" aria-labelledby="serviceTabs">
+          <div class="prices__head" aria-hidden="true"><span>Услуга</span><span>Барбер</span><span>Топ-барбер</span><span></span></div>
+          <ul class="price-list" id="priceList"></ul>
+        </div>
         <noscript><p class="section__lead">Чтобы увидеть цены и записаться онлайн, включите JavaScript или позвоните: <a href="tel:+73830000000">+7 (383) 000-00-00</a>.</p></noscript>
       </div>
     </section>
@@ -237,194 +232,114 @@
     <!-- BARBERS -->
     <section class="section" id="barbers">
       <div class="container">
-        <header class="section__head reveal">
-          <p class="kicker">Команда</p>
-          <h2>Барберы</h2>
-          <p class="section__lead">Выберите мастера по стилю или запишитесь к любому свободному.</p>
+        <header class="section__head">
+          <h2 class="section__title">Барберы</h2>
+          <p class="section__lead">Запишитесь к мастеру, который вам нравится, или к любому свободному.</p>
         </header>
         <div class="barbers" id="barberList"></div>
-        <p class="swipe-hint" aria-hidden="true">Листайте вбок, чтобы увидеть всех мастеров →</p>
+        <p class="swipe-hint" aria-hidden="true">Листайте вбок, чтобы увидеть всех мастеров</p>
       </div>
     </section>
 
     <!-- WORKS -->
     <section class="section section--alt" id="works">
       <div class="container">
-        <header class="section__head reveal">
-          <p class="kicker">Работы</p>
-          <h2>Из нашего зала</h2>
-          <p class="section__lead">Новые работы каждый день выкладываем в Telegram-канал и ВКонтакте.</p>
+        <header class="section__head">
+          <h2 class="section__title">Работы</h2>
+          <p class="section__lead">Новые стрижки каждый день публикуем в Telegram-канале.</p>
         </header>
         <div class="gallery" id="gallery">
-          <button class="gallery__item gallery__item--tall" data-full="photo-1493256338651-d82f7acb2b38"><img loading="lazy" src="https://images.unsplash.com/photo-1493256338651-d82f7acb2b38?w=700&q=70&auto=format&fit=crop" alt="Окантовка затылка машинкой"></button>
-          <button class="gallery__item" data-full="photo-1599351431202-1e0f0137899a"><img loading="lazy" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=700&q=70&auto=format&fit=crop" alt="Фейд и контур машинкой"></button>
-          <button class="gallery__item" data-full="photo-1622286342621-4bd786c2447c"><img loading="lazy" src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=700&q=70&auto=format&fit=crop" alt="Мужская стрижка ножницами"></button>
-          <button class="gallery__item gallery__item--wide" data-full="photo-1585747860715-2ba37e788b70"><img loading="lazy" src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1000&q=70&auto=format&fit=crop" alt="Зал барбершопа с креслами у кирпичной стены"></button>
-          <button class="gallery__item" data-full="photo-1605497788044-5a32c7078486"><img loading="lazy" src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=700&q=70&auto=format&fit=crop" alt="Барбер укладывает волосы феном"></button>
-          <button class="gallery__item" data-full="photo-1517832606299-7ae9b720a186"><img loading="lazy" src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=700&q=70&auto=format&fit=crop" alt="Оформление бороды ножницами"></button>
+          <button class="gallery__item gallery__item--tall" data-full="photo-1493256338651-d82f7acb2b38"><img loading="lazy" width="700" height="1000" src="https://images.unsplash.com/photo-1493256338651-d82f7acb2b38?w=700&q=70&auto=format&fit=crop" alt="Окантовка затылка машинкой"></button>
+          <button class="gallery__item" data-full="photo-1599351431202-1e0f0137899a"><img loading="lazy" width="700" height="500" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=700&q=70&auto=format&fit=crop" alt="Фейд и контур машинкой"></button>
+          <button class="gallery__item" data-full="photo-1622286342621-4bd786c2447c"><img loading="lazy" width="700" height="500" src="https://images.unsplash.com/photo-1622286342621-4bd786c2447c?w=700&q=70&auto=format&fit=crop" alt="Мужская стрижка ножницами"></button>
+          <button class="gallery__item gallery__item--wide" data-full="photo-1585747860715-2ba37e788b70"><img loading="lazy" width="1000" height="500" src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=1000&q=70&auto=format&fit=crop" alt="Зал барбершопа с креслами у кирпичной стены"></button>
+          <button class="gallery__item" data-full="photo-1605497788044-5a32c7078486"><img loading="lazy" width="700" height="500" src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?w=700&q=70&auto=format&fit=crop" alt="Барбер укладывает волосы феном"></button>
+          <button class="gallery__item" data-full="photo-1517832606299-7ae9b720a186"><img loading="lazy" width="700" height="500" src="https://images.unsplash.com/photo-1517832606299-7ae9b720a186?w=700&q=70&auto=format&fit=crop" alt="Оформление бороды ножницами"></button>
         </div>
       </div>
     </section>
 
-    <!-- PROCESS -->
-    <section class="section" id="process">
-      <div class="container">
-        <header class="section__head reveal">
-          <p class="kicker">Как проходит визит</p>
-          <h2>От записи до укладки</h2>
-        </header>
-        <ol class="steps">
-          <li class="step reveal"><span class="step__n">01</span><h3>Запись онлайн</h3><p>Выбираете услугу, мастера и время. Это занимает около минуты.</p></li>
-          <li class="step reveal"><span class="step__n">02</span><h3>Напоминание</h3><p>За 2 часа до визита пришлём сообщение с адресом и временем.</p></li>
-          <li class="step reveal"><span class="step__n">03</span><h3>Консультация</h3><p>Пять минут обсуждаем форму, привычки укладки и как часто вы готовы стричься.</p></li>
-          <li class="step reveal"><span class="step__n">04</span><h3>Стрижка и уход</h3><p>Мытьё головы, стрижка, укладка и совет, какое средство взять домой.</p></li>
-        </ol>
-      </div>
-    </section>
-
     <!-- REVIEWS -->
-    <section class="section section--alt" id="reviews">
+    <section class="section" id="reviews">
       <div class="container">
-        <header class="section__head section__head--row reveal">
-          <div>
-            <p class="kicker">Отзывы</p>
-            <h2>Что говорят гости</h2>
-          </div>
+        <header class="section__head section__head--row">
+          <h2 class="section__title">Отзывы</h2>
           <div class="rating">
             <b>4,9</b>
-            <div><span class="stars" aria-hidden="true">★★★★★</span><span>870 оценок на Яндекс Картах и в 2ГИС</span><a class="link" href="https://yandex.ru/maps/65/novosibirsk/" target="_blank" rel="noopener">Все отзывы <svg class="ic"><use href="#i-right"/></svg></a></div>
+            <div><span class="stars" aria-hidden="true">★★★★★</span><span>870 оценок на Яндекс Картах и в 2ГИС</span><a class="link" href="https://yandex.ru/maps/65/novosibirsk/" target="_blank" rel="noopener">Все отзывы</a></div>
           </div>
         </header>
         <div class="reviews">
-          <figure class="review reveal">
+          <figure class="review">
             <span class="stars" aria-label="5 из 5">★★★★★</span>
             <blockquote>Хожу к Илье полтора года. Фейд держится три недели, потом достаточно подровнять. Ни разу не ждал дольше пары минут.</blockquote>
-            <figcaption><b>Дмитрий К.</b><span>Яндекс Карты · сентябрь 2026</span></figcaption>
+            <figcaption><b>Дмитрий К.</b><span>Яндекс Карты, сентябрь 2026</span></figcaption>
           </figure>
-          <figure class="review reveal">
+          <figure class="review">
             <span class="stars" aria-label="5 из 5">★★★★★</span>
             <blockquote>Первый раз брился опасной бритвой. Горячие полотенца, ни одного пореза, кожа после спокойная. Подарил такой же сертификат отцу.</blockquote>
-            <figcaption><b>Сергей М.</b><span>2ГИС · август 2026</span></figcaption>
+            <figcaption><b>Сергей М.</b><span>2ГИС, август 2026</span></figcaption>
           </figure>
-          <figure class="review reveal">
+          <figure class="review">
             <span class="stars" aria-label="5 из 5">★★★★★</span>
             <blockquote>Пришли с сыном на «Отец + сын». Никита нашёл подход к восьмилетке, который обычно вертится. Стриглись одновременно и уложились в час.</blockquote>
-            <figcaption><b>Андрей В.</b><span>Яндекс Карты · октябрь 2026</span></figcaption>
-          </figure>
-          <figure class="review reveal">
-            <span class="stars" aria-label="5 из 5">★★★★★</span>
-            <blockquote>Чёлка легла не так, как я хотел. Зашёл через четыре дня, Тимур поправил бесплатно и без лишних вопросов.</blockquote>
-            <figcaption><b>Олег Н.</b><span>2ГИС · июль 2026</span></figcaption>
+            <figcaption><b>Андрей В.</b><span>Яндекс Карты, октябрь 2026</span></figcaption>
           </figure>
         </div>
       </div>
     </section>
 
     <!-- OFFERS -->
-    <section class="section" id="offers">
-      <div class="container">
-        <header class="section__head reveal">
-          <p class="kicker">Предложения</p>
-          <h2>Скидки и подарки</h2>
-        </header>
-        <div class="offers">
-          <article class="offer offer--main reveal">
-            <svg class="ic ic--lg"><use href="#i-percent"/></svg>
-            <h3>−15% на первый визит</h3>
-            <p>Скидка применяется сама, если записаться онлайн. Подходит для любой услуги и любого мастера.</p>
-            <button class="btn btn--gold" type="button" data-book>Записаться со скидкой</button>
-          </article>
-          <article class="offer reveal">
-            <svg class="ic ic--lg"><use href="#i-users"/></svg>
-            <h3>Приведи друга</h3>
-            <p>Друг получает −15% на первую стрижку, вы получаете −500 ₽ на следующий визит. А каждая шестая стрижка у нас и так за полцены.</p>
-          </article>
-          <article class="offer reveal">
-            <svg class="ic ic--lg"><use href="#i-gift"/></svg>
-            <h3>Подарочный сертификат</h3>
-            <p>На сумму от 2 000 ₽ или на конкретную услугу. Действует 6 месяцев. Электронный сертификат придёт в сообщении, бумажный заберёте в зале.</p>
-            <button class="link link--btn" type="button" id="giftOpen">Оформить сертификат <svg class="ic"><use href="#i-right"/></svg></button>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- SHOP -->
-    <section class="section section--alt" id="shop">
-      <div class="container shop">
-        <div class="shop__img reveal">
-          <img loading="lazy" src="https://images.unsplash.com/photo-1587909209111-5097ee578ec3?w=900&q=70&auto=format&fit=crop" alt="Помада для укладки и деревянный гребень" width="900" height="1100">
-        </div>
-        <div class="shop__body">
-          <header class="section__head reveal">
-            <p class="kicker">Уход домой</p>
-            <h2>Средства, которыми мы работаем</h2>
-            <p class="section__lead">Мастер подберёт средство под ваш тип волос и покажет, сколько брать. Купить можно в зале после визита.</p>
-          </header>
-          <ul class="products">
-            <li class="product reveal"><div><h3>Матовая паста</h3><p>Средняя фиксация без блеска, смывается водой. 100 мл</p></div><b>1 450 ₽</b></li>
-            <li class="product reveal"><div><h3>Глина для объёма</h3><p>Сильная фиксация для коротких стрижек и кропа. 75 мл</p></div><b>1 600 ₽</b></li>
-            <li class="product reveal"><div><h3>Масло для бороды</h3><p>Смягчает жёсткий волос и убирает зуд в первые недели. 30 мл</p></div><b>1 200 ₽</b></li>
-            <li class="product reveal"><div><h3>Шампунь для ежедневного мытья</h3><p>Не сушит кожу головы, подходит и для бороды. 250 мл</p></div><b>990 ₽</b></li>
-          </ul>
-        </div>
+    <section class="offers" id="offers" aria-labelledby="offersTitle">
+      <div class="container offers__inner">
+        <h2 id="offersTitle" class="offers__title">Скидки и подарки</h2>
+        <ul class="offers__list">
+          <li><b>−15%</b> на первую стрижку при онлайн-записи</li>
+          <li><b>−500&nbsp;₽</b> вам за каждого приведённого друга</li>
+          <li><b>½ цены</b> на каждую шестую стрижку</li>
+        </ul>
+        <button class="btn btn--ghost" type="button" id="giftOpen"><svg class="ic" aria-hidden="true"><use href="#i-gift"/></svg>Подарочный сертификат</button>
       </div>
     </section>
 
     <!-- FAQ -->
-    <section class="section" id="faq">
+    <section class="section section--alt" id="faq">
       <div class="container container--narrow">
-        <header class="section__head reveal">
-          <p class="kicker">Вопросы</p>
-          <h2>Частые вопросы</h2>
-        </header>
+        <h2 class="section__title">Частые вопросы</h2>
         <div class="faq">
           <details>
             <summary>Почему дороже, чем в парикмахерской у дома?</summary>
-            <p>Мы стрижём час, а не 20 минут: консультация, мытьё головы, работа ножницами и укладка. Форма держится 3–4 недели, поэтому стричься приходится реже, и за год выходит примерно столько же.</p>
-          </details>
-          <details>
-            <summary>Есть программа лояльности?</summary>
-            <p>Каждая шестая стрижка за полцены. Визиты считаем по номеру телефона, карта не нужна. Счётчик продолжается, даже если вы ходите к разным мастерам.</p>
+            <p>Мы стрижём час, а не 20 минут: консультация, мытьё головы, ножницы и укладка. Форма держится 3–4 недели, поэтому стричься приходится реже.</p>
           </details>
           <details>
             <summary>Можно прийти без записи?</summary>
-            <p>Можно, если у мастера есть окно. Свободное время видно в онлайн-записи, так вы точно не будете ждать.</p>
+            <p>Можно, если у мастера есть окно. Свободное время видно в онлайн-записи.</p>
           </details>
           <details>
             <summary>Как перенести или отменить визит?</summary>
-            <p>Позвоните или напишите в Telegram не позже чем за 3 часа до начала. Перенос бесплатный.</p>
+            <p>Позвоните или напишите в Telegram не позже чем за 3 часа. Перенос бесплатный.</p>
           </details>
           <details>
             <summary>Что будет, если я опоздаю?</summary>
-            <p>Ждём 15 минут. Если опоздание больше, мастер может не успеть сделать услугу полностью, и мы предложим другое время.</p>
+            <p>Ждём 15 минут. Если опоздание больше, предложим другое время, чтобы мастер успел сделать всё как следует.</p>
           </details>
           <details>
             <summary>Стрижёте детей?</summary>
             <p>Да, с 4 до 12 лет. Детей чаще всего стрижёт Никита, на время стрижки даём планшет с мультиками.</p>
-          </details>
-          <details>
-            <summary>Как работает бесплатная коррекция?</summary>
-            <p>В течение 7 дней после визита приходите к тому же мастеру, и он поправит стрижку без оплаты. Запишитесь заранее, чтобы занять время.</p>
-          </details>
-          <details>
-            <summary>Как можно оплатить?</summary>
-            <p>Картой, наличными или по СБП. Чаевые мастеру можно оставить по QR-коду на зеркале.</p>
           </details>
         </div>
       </div>
     </section>
 
     <!-- CONTACTS -->
-    <section class="section section--alt" id="contacts">
+    <section class="section" id="contacts">
       <div class="container contacts">
-        <div class="contacts__info reveal">
-          <p class="kicker">Контакты</p>
-          <h2>Как нас найти</h2>
+        <div class="contacts__info">
+          <h2 class="section__title">Как нас найти</h2>
           <ul class="contacts__list">
             <li><svg class="ic"><use href="#i-pin"/></svg><div><b>Новосибирск, ул. Цирюльная, 7</b><span>5 минут пешком от метро «Площадь Ленина», вход со двора</span></div></li>
             <li><svg class="ic"><use href="#i-clock"/></svg><div><b>Ежедневно 10:00–22:00</b><span>Без выходных и перерывов</span></div></li>
-            <li><svg class="ic"><use href="#i-phone"/></svg><div><b><a href="tel:+73830000000">+7 (383) 000-00-00</a></b><span>Звонки с 10:00 до 22:00</span></div></li>
+            <li><svg class="ic"><use href="#i-phone"/></svg><div><b><a href="tel:+73830000000">+7 (383) 000-00-00</a></b><span>Звонки с 10:00 до 22:00, онлайн-запись круглосуточно</span></div></li>
             <li><svg class="ic"><use href="#i-car"/></svg><div><b>Парковка во дворе</b><span>6 мест для гостей, бесплатно на время визита</span></div></li>
           </ul>
           <div class="socials">
@@ -432,7 +347,7 @@
             <a class="btn btn--ghost btn--sm" href="#" aria-label="Сообщество ВКонтакте">ВКонтакте</a>
           </div>
         </div>
-        <div class="map reveal" role="img" aria-label="Схема проезда: барбершоп в двух кварталах от метро Площадь Ленина">
+        <div class="map" role="img" aria-label="Схема проезда: барбершоп в двух кварталах от метро Площадь Ленина">
           <svg viewBox="0 0 600 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
             <rect width="600" height="440" class="map__bg"/>
             <g class="map__blocks">
@@ -457,9 +372,10 @@
     </section>
 
     <!-- FINAL CTA -->
+    <div class="pole" aria-hidden="true"></div>
     <section class="final">
-      <div class="container final__inner reveal">
-        <h2>Сегодня свободно ещё <span id="freeToday">несколько</span> окон</h2>
+      <div class="container final__inner">
+        <h2>Запишитесь на удобное время</h2>
         <p>Запись занимает минуту. Подтверждение придёт на телефон, а перенести визит можно бесплатно, если предупредить за 3 часа.</p>
         <button class="btn btn--gold btn--lg" type="button" data-book>
           <svg class="ic"><use href="#i-calendar"/></svg>Выбрать время
@@ -471,7 +387,7 @@
   <footer class="footer">
     <div class="container footer__inner">
       <div>
-        <a class="logo" href="#top"><img src="favicon.svg" width="32" height="32" alt=""><span class="logo__text">Опасная<br>бритва</span></a>
+        <a class="logo" href="#top"><img src="favicon.svg" width="32" height="32" alt=""><span class="logo__text" translate="no">Опасная<br>бритва</span></a>
         <p class="footer__muted">Мужской барбершоп в центре Новосибирска.</p>
       </div>
       <nav class="footer__nav" aria-label="Меню в подвале">
@@ -479,7 +395,7 @@
       </nav>
       <div class="footer__muted footer__legal">
         <p>© 2026 «Опасная бритва». <a href="#">Политика конфиденциальности</a></p>
-        <p>Концепт-проект: барбершоп вымышленный, имена, отзывы, цифры и адрес придуманы для демонстрации. Фото: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</p>
+        <p id="demo-note">Демо-сайт: барбершоп вымышленный, имена, отзывы, цифры и адрес придуманы для демонстрации. Фото: <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</p>
       </div>
     </div>
   </footer>
@@ -514,7 +430,7 @@
       <form class="bk-step bk-form" data-step="4" id="bkForm" novalidate hidden>
         <div class="field">
           <label for="bkName">Имя</label>
-          <input id="bkName" name="name" autocomplete="given-name" required placeholder="Как к вам обращаться">
+          <input id="bkName" name="name" autocomplete="given-name" required placeholder="Например, Дмитрий…">
           <p class="field__err" id="bkNameErr"></p>
         </div>
         <div class="field">
@@ -524,7 +440,7 @@
         </div>
         <div class="field">
           <label for="bkComment">Комментарий <span class="optional">необязательно</span></label>
-          <textarea id="bkComment" name="comment" rows="2" placeholder="Например: хочу оставить длину сверху"></textarea>
+          <textarea id="bkComment" name="comment" rows="2" placeholder="Например, оставить длину сверху…"></textarea>
         </div>
         <label class="check">
           <input type="checkbox" id="bkAgree" required>
@@ -572,11 +488,11 @@
         <div class="gift-card" aria-hidden="true">
           <span class="gift-card__brand">Опасная бритва</span>
           <span class="gift-card__value" id="giftValue">3 000 ₽</span>
-          <span class="gift-card__note">Подарочный сертификат · 6 месяцев</span>
+          <span class="gift-card__note">Подарочный сертификат на 6 месяцев</span>
         </div>
         <div class="field">
           <label for="giftTo">Кому <span class="optional">имя на сертификате</span></label>
-          <input id="giftTo" name="to" placeholder="Например: Папе">
+          <input id="giftTo" name="to" placeholder="Например, Папе…">
         </div>
         <div class="field">
           <label for="giftPhone">Ваш телефон</label>

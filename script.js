@@ -155,18 +155,18 @@ function updateOpenStatus() {
 }
 
 /* ===== Услуги и цены ===== */
-const priceState = { cat: 'all', tier: 0 };
+const priceState = { cat: 'all' };
 function renderPrices() {
   const list = SERVICES.filter(s => priceState.cat === 'all' || s.cat === priceState.cat);
   $('#priceList').innerHTML = list.map(s => `
     <li class="price">
-      <div class="price__name">${s.name}${s.hit ? '<span class="badge">Хит</span>' : ''}</div>
-      <p class="price__desc">${s.desc}</p>
-      <p class="price__meta"><svg class="ic" aria-hidden="true"><use href="#i-clock"/></svg>${durText(s.dur)}</p>
-      <div class="price__right">
-        <span class="price__value">${rub(s.price[priceState.tier])}</span>
-        <button class="price__book" type="button" data-book data-service="${s.id}" aria-label="Записаться: ${s.name}">Записаться</button>
+      <div class="price__info">
+        <div class="price__name">${s.name}${s.hit ? '<span class="badge">Хит</span>' : ''}</div>
+        <p class="price__desc">${s.desc}. <span class="price__dur">${durText(s.dur)}</span></p>
       </div>
+      <p class="price__value"><small>Барбер</small>${rub(s.price[0])}</p>
+      <p class="price__value price__value--top"><small>Топ-барбер</small>${rub(s.price[1])}</p>
+      <button class="price__book" type="button" data-book data-service="${s.id}" aria-label="Записаться: ${s.name}">Записаться</button>
     </li>`).join('');
 }
 function bindToggleGroup(container, attr, onPick) {
@@ -185,21 +185,19 @@ function bindToggleGroup(container, attr, onPick) {
   });
 }
 bindToggleGroup($('#serviceTabs'), 'aria-selected', b => { priceState.cat = b.dataset.cat; renderPrices(); });
-bindToggleGroup($('.tier'), 'aria-checked', b => { priceState.tier = +b.dataset.tier; renderPrices(); });
 
 /* ===== Барберы ===== */
 function renderBarbers() {
   $('#barberList').innerHTML = BARBERS.map(b => `
-    <article class="barber reveal">
+    <article class="barber">
       <div class="barber__photo">
         <img loading="lazy" src="${IMG(b.img, 600)}" alt="${b.name}" width="600" height="750">
-        ${b.tier ? '<span class="badge barber__tier">Топ-барбер</span>' : ''}
       </div>
       <div class="barber__body">
-        <p class="barber__role">${b.role} · стаж ${b.exp}</p>
+        <p class="barber__role">${b.role}, стаж ${b.exp}</p>
         <h3 class="barber__name">${b.name}</h3>
         <p class="barber__spec">${b.spec}</p>
-        <p class="barber__rating"><span class="stars" aria-hidden="true">★</span> ${b.rating} · ${b.reviews} ${plural(b.reviews, ['отзыв', 'отзыва', 'отзывов'])}</p>
+        <p class="barber__rating"><span class="stars" aria-hidden="true">★</span> ${b.rating} (${b.reviews} ${plural(b.reviews, ['отзыв', 'отзыва', 'отзывов'])})</p>
         <p class="barber__free" data-free="${b.id}"></p>
         <button class="btn btn--ghost btn--sm" type="button" data-book data-barber="${b.id}">Записаться к ${b.dative}</button>
       </div>
@@ -214,9 +212,8 @@ const TITLES = { 1: 'Выберите услугу', 2: 'Выберите мас
 function priceFor(serviceId, barberSel) {
   const s = svc(serviceId);
   if (!s) return '';
-  if (!barberSel || barberSel === 'any') {
-    return s.price[0] === s.price[1] ? rub(s.price[0]) : `${s.price[0].toLocaleString('ru-RU')}–${rub(s.price[1])}`;
-  }
+  // Любой свободный мастер всегда по цене барбера, даже если достанется топ-барбер
+  if (!barberSel || barberSel === 'any') return rub(s.price[0]);
   return rub(s.price[barberById(barberSel).tier]);
 }
 function firstMissing() {
@@ -233,7 +230,7 @@ function renderServicesStep() {
   const groups = Object.entries(CATS).map(([cat, title]) => {
     const items = SERVICES.filter(s => s.cat === cat).map(s => `
       <button class="opt" type="button" role="radio" aria-checked="${bk.service === s.id}" data-pick-service="${s.id}">
-        <span class="opt__main"><span class="opt__title">${s.name}${s.hit ? ' <span class="badge">Хит</span>' : ''}</span><span class="opt__sub">${durText(s.dur)} · ${s.desc}</span></span>
+        <span class="opt__main"><span class="opt__title">${s.name}${s.hit ? ' <span class="badge">Хит</span>' : ''}</span><span class="opt__sub">${durText(s.dur)}. ${s.desc}</span></span>
         <span class="opt__price">${priceFor(s.id, bk.barber)}</span>
       </button>`).join('');
     return `<p class="opt-group">${title}</p><div class="opt-list" role="radiogroup" aria-label="${title}">${items}</div>`;
@@ -244,17 +241,17 @@ function renderBarbersStep() {
   const any = `
     <button class="opt" type="button" role="radio" aria-checked="${bk.barber === 'any'}" data-pick-barber="any">
       <span class="opt__img opt__any"><svg class="ic" aria-hidden="true"><use href="#i-users"/></svg></span>
-      <span class="opt__main"><span class="opt__title">Любой свободный мастер</span><span class="opt__sub">Больше свободного времени</span></span>
+      <span class="opt__main"><span class="opt__title">Любой свободный мастер</span><span class="opt__sub">По цене барбера, даже если достанется топ</span></span>
       <span class="opt__price">${bk.service ? priceFor(bk.service, 'any') : ''}</span>
     </button>`;
   const list = BARBERS.map(b => {
     // Ближайшее время мастера под выбранную услугу, чтобы не перебирать мастеров вслепую
     const f = bk.service ? nearestSlot(bk.service, b.id) : null;
-    const when = f ? ` · <span class="opt__free">свободен ${dayLabel(f.key)} в ${toTime(f.t)}</span>` : '';
+    const when = f ? `<br><span class="opt__free">свободен ${dayLabel(f.key)} в ${toTime(f.t)}</span>` : '';
     return `
     <button class="opt" type="button" role="radio" aria-checked="${bk.barber === b.id}" data-pick-barber="${b.id}">
-      <img class="opt__img" src="${IMG(b.img, 120)}" alt="" loading="lazy">
-      <span class="opt__main"><span class="opt__title">${b.name}</span><span class="opt__sub">${b.role} · ★ ${b.rating}${when}</span></span>
+      <img class="opt__img" src="${IMG(b.img, 120)}" width="48" height="48" alt="" loading="lazy">
+      <span class="opt__main"><span class="opt__title">${b.name}</span><span class="opt__sub">${b.role}, ★&nbsp;${b.rating}${when}</span></span>
       <span class="opt__price">${bk.service ? priceFor(bk.service, b.id) : ''}</span>
     </button>`;
   }).join('');
@@ -292,7 +289,7 @@ function renderSummary() {
   const s = svc(bk.service);
   const who = bk.barber ? (bk.barber === 'any' ? 'Любой мастер' : barberById(bk.barber).short) : '';
   const when = bk.date && bk.time ? `${dayLabel(bk.date)}, ${bk.time}` : '';
-  el.innerHTML = `<b>${s.name}</b><span class="gold">${priceFor(bk.service, bk.barber)}</span>${[who, when].filter(Boolean).map(x => ' · ' + x).join('')}`;
+  el.innerHTML = `<b>${s.name}</b><span class="gold">${priceFor(bk.service, bk.barber)}</span>${[who, when].filter(Boolean).map(x => ', ' + x).join('')}`;
 }
 
 function go(step) {
@@ -501,9 +498,9 @@ async function submitBooking() {
 
   const btn = $('#bkNext');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>Отправляем';
+  btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>Отправляем…';
   const booking = {
-    service: s.name, price: s.price[master.tier], duration: s.dur, barber: master.name, barberId: master.id,
+    service: s.name, price: bk.barber === 'any' ? s.price[0] : s.price[master.tier], duration: s.dur, barber: master.name, barberId: master.id,
     date: bk.date, time: bk.time, name: nameIn.value.trim(), phone: phoneIn.value,
     comment: $('#bkComment').value.trim(), source: trafficSource(), createdAt: new Date().toISOString(),
   };
@@ -516,6 +513,7 @@ async function submitBooking() {
   lastBooking = booking;
   $('#bkDoneText').textContent = `${booking.name}, ждём вас ${dayLabel(booking.date)} в ${booking.time}. ${s.name} у мастера ${master.gen}, ${rub(booking.price)}. Адрес: ул. Цирюльная, 7.`;
   go(5);
+  renderMyBooking();
   $('#bkForm').reset();
   Object.assign(bk, { service: null, barber: null, date: null, time: null });
   refreshAvailability();
@@ -582,7 +580,7 @@ $('#giftForm').addEventListener('submit', async e => {
   if (!ok) { giftPhone.focus(); return; }
   const btn = $('#giftSubmit');
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>Оформляем';
+  btn.innerHTML = '<span class="spinner" aria-hidden="true"></span>Оформляем…';
   const amount = new FormData(e.target).get('amount');
   // Позже эту заявку тоже будет получать Telegram-бот
   await sendBooking({ type: 'gift', amount: giftLabel(amount), to: $('#giftTo').value.trim(), phone: giftPhone.value, createdAt: new Date().toISOString() });
@@ -592,6 +590,46 @@ $('#giftForm').addEventListener('submit', async e => {
   e.target.reset();
   $('#giftValue').textContent = giftLabel('3000');
   toast('Заявка на сертификат принята. Перезвоним в течение 15 минут');
+});
+
+/* ===== Моя запись: видна на первом экране, можно отменить ===== */
+function upcomingBooking() {
+  const now = nskNow();
+  return loadBookings()
+    .filter(b => b.barberId && (b.date > now.key || (b.date === now.key && toMin(b.time) > now.min)))
+    .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))[0] || null;
+}
+function renderMyBooking() {
+  const b = upcomingBooking();
+  $('#slotDefault').hidden = !!b;
+  $('#myBooking').hidden = !b;
+  if (!b) return;
+  $('#myTime').textContent = `${dayLabel(b.date)} в ${b.time}`;
+  $('#myMeta').textContent = `${b.service}, мастер ${b.barber.split(' ')[0]}, ${rub(b.price)}`;
+  $('#myCancel').dataset.id = b.createdAt;
+}
+let cancelTimer;
+$('#myCancel').addEventListener('click', e => {
+  const btn = e.currentTarget;
+  // Отмена необратима: первое нажатие только просит подтвердить
+  if (btn.dataset.armed !== '1') {
+    btn.dataset.armed = '1';
+    btn.textContent = 'Нажмите ещё раз, чтобы отменить';
+    clearTimeout(cancelTimer);
+    cancelTimer = setTimeout(() => { btn.dataset.armed = ''; btn.textContent = 'Отменить запись'; }, 4000);
+    return;
+  }
+  clearTimeout(cancelTimer);
+  btn.dataset.armed = '';
+  btn.textContent = 'Отменить запись';
+  try {
+    localStorage.setItem(BOOKINGS_KEY, JSON.stringify(loadBookings().filter(x => x.createdAt !== btn.dataset.id)));
+  } catch (_) { /* нет доступа к хранилищу */ }
+  // Позже здесь же сообщим об отмене администратору через Telegram-бота
+  rebuildOwnBusy();
+  refreshAvailability();
+  renderMyBooking();
+  toast('Запись отменена, время снова свободно');
 });
 
 /* ===== Ближайшее время и свободные окна ===== */
@@ -613,8 +651,8 @@ function refreshAvailability() {
   const today = nskNow().key;
   const count = slotsFor(today, 'any', 60).filter(x => x.ok).length;
   const title = $('.final h2');
-  if (count > 0) title.innerHTML = `Сегодня свободно ещё <span>${count}</span> ${plural(count, ['окно', 'окна', 'окон'])}`;
-  else if (n) title.innerHTML = `Ближайшее свободное время: <span>${dayLabel(n.key)} в&nbsp;${toTime(n.t)}</span>`;
+  if (count > 0) title.textContent = `Сегодня свободно ещё ${count} ${plural(count, ['окно', 'окна', 'окон'])}`;
+  else if (n) title.textContent = `Свободно ${dayLabel(n.key)} с ${toTime(n.t)}`;
   else title.textContent = 'Запишитесь на удобное время';
 }
 
@@ -642,13 +680,7 @@ function toast(msg) {
 
 /* ===== Появление и активный пункт меню ===== */
 function initReveal() {
-  const items = $$('.reveal');
-  if (!('IntersectionObserver' in window)) { items.forEach(el => el.classList.add('is-in')); return; }
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('is-in'); io.unobserve(en.target); } });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  items.forEach((el, i) => { el.style.transitionDelay = `${(i % 4) * 70}ms`; io.observe(el); });
-
+  if (!('IntersectionObserver' in window)) return;
   const links = $$('.nav a');
   const spy = new IntersectionObserver(entries => {
     entries.forEach(en => {
@@ -665,6 +697,7 @@ renderPrices();
 renderBarbers();
 updateOpenStatus();
 refreshAvailability();
+renderMyBooking();
 initReveal();
 openFromUrl();
-setInterval(() => { updateOpenStatus(); refreshAvailability(); }, 60000);
+setInterval(() => { updateOpenStatus(); refreshAvailability(); renderMyBooking(); }, 60000);
