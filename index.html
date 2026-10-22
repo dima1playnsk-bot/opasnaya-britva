@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Барбершоп «Опасная бритва» — мужские стрижки и бритьё в Новосибирске</title>
   <meta name="description" content="Мужские стрижки, фейды, борода и королевское бритьё опасной бритвой в центре Новосибирска. Онлайн-запись за минуту, коррекция стрижки 7 дней бесплатно.">
-  <meta name="theme-color" content="#0E0D0C">
+  <meta name="theme-color" content="#171717">
   <!-- Барбершоп вымышленный: не показываем его в поиске как настоящую организацию -->
   <meta name="robots" content="noindex, follow">
   <meta name="color-scheme" content="dark">
@@ -25,8 +25,8 @@
   <link rel="preload" as="image" href="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=75&auto=format&fit=crop"
         imagesrcset="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=70&auto=format&fit=crop 800w, https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1280&q=72&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=75&auto=format&fit=crop 1920w"
         imagesizes="100vw" fetchpriority="high">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3.9">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=4.0">
 
   <script type="application/ld+json">
   {
@@ -104,6 +104,8 @@
     <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></symbol>
     <symbol id="i-car" viewBox="0 0 24 24"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></symbol>
     <symbol id="i-star" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></symbol>
+    <symbol id="i-tg" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M21.4 3.6 2.7 10.8c-1.2.5-1.1 2 .1 2.3l4.6 1.4 1.8 5.5c.3.9 1.4 1.1 2 .5l2.6-2.4 4.9 3.6c.7.5 1.7.1 1.9-.8l3.2-15.2c.2-1.2-.9-2.1-2-1.7Zm-3.5 4.1-7.6 6.9-.3 3.1-1.4-4.4 9-5.8c.3-.2.6.1.3.2Z"/></symbol>
+    <symbol id="i-wa" viewBox="0 0 24 24"><path d="M12 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.8-1.3A9.5 9.5 0 1 0 12 2.5Z"/><path fill="currentColor" stroke="none" d="M8.6 7.4c.3-.5.6-.5 1-.5h.6c.2 0 .4.1.5.4l.8 1.9c.1.2 0 .5-.1.7l-.6.7c-.1.2-.1.4 0 .6.6 1.1 1.5 2 2.6 2.6.2.1.4.1.6 0l.7-.6c.2-.2.5-.2.7-.1l1.9.8c.3.1.4.3.4.5v.6c0 .4 0 .7-.5 1-.8.5-2.3.6-4.6-.9-2.1-1.4-3.6-3.4-3.9-5-.2-1.1-.1-1.7.3-2.1Z"/></symbol>
   </svg>
 
   <header class="header" id="header">
@@ -122,6 +124,9 @@
       </nav>
       <div class="header__actions">
         <a class="header__phone" href="tel:+73830000000">+7 (383) 000-00-00</a>
+        <!-- многие не хотят заполнять форму: дать сразу написать в мессенджер -->
+        <a class="msg" href="#contacts" data-demo-msg="Telegram" aria-label="Написать в Telegram"><svg class="ic"><use href="#i-tg"/></svg></a>
+        <a class="msg" href="#contacts" data-demo-msg="WhatsApp" aria-label="Написать в WhatsApp"><svg class="ic"><use href="#i-wa"/></svg></a>
         <button class="btn btn--gold btn--sm" type="button" data-book>Записаться</button>
         <button class="burger" type="button" id="burger" aria-label="Открыть меню" aria-expanded="false" aria-controls="nav">
           <svg class="ic"><use href="#i-menu"/></svg>
@@ -142,8 +147,9 @@
       </div>
       <div class="container hero__inner">
         <div class="hero__content">
+          <p class="hero__where"><span class="status" id="openStatus">Ежедневно 10:00–22:00</span><span>ул.&nbsp;Цирюльная,&nbsp;7</span></p>
           <p class="hero__kicker">Мужской барбершоп в центре Новосибирска</p>
-          <h1 class="hero__title">Мужская стрижка, которая держит форму до&nbsp;следующего визита</h1>
+          <h1 class="hero__title">Мужская стрижка, которая <mark>держит форму</mark> до&nbsp;следующего визита</h1>
           <p class="hero__lead">Стрижём, оформляем бороду и бреем опасной бритвой. Работаем по записи минута в минуту, а если через неделю что-то не понравится, поправим бесплатно.</p>
           <div class="hero__cta">
             <button class="btn btn--gold btn--lg" type="button" data-book>
@@ -152,11 +158,12 @@
             <a class="btn btn--ghost btn--lg" href="#services">Услуги и цены</a>
           </div>
           <p class="hero__how">Запись за минуту: выберите услугу, мастера и свободное время.</p>
-          <ul class="hero__trust">
-            <li><span class="stars" aria-hidden="true">★★★★★</span> <b>4,9</b> на Яндекс Картах</li>
-            <li><b>−15%</b> на первую стрижку онлайн</li>
-            <li class="hero__where"><span class="status" id="openStatus">Ежедневно 10:00–22:00</span><span>ул.&nbsp;Цирюльная,&nbsp;7</span></li>
-          </ul>
+          <!-- доверие рядом с кнопкой: лица мастеров и отзывы -->
+          <div class="hero__proof">
+            <div class="avatars" id="heroAvatars" aria-hidden="true"></div>
+            <p><span class="stars" aria-hidden="true">★★★★★</span> <b>4,9</b> · 870 оценок на&nbsp;Яндекс Картах<br>
+              <span class="hero__proof-sub"><b>−15%</b> на первую стрижку при записи онлайн</span></p>
+          </div>
         </div>
 
         <aside class="slot-card" aria-live="polite">
@@ -538,6 +545,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="script.js?v=3.10" defer></script>
+  <script src="script.js?v=4.0" defer></script>
 </body>
 </html>

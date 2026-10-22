@@ -738,3 +738,19 @@ renderMyBooking();
 initReveal();
 openFromUrl();
 setInterval(() => { updateOpenStatus(); refreshAvailability(); renderMyBooking(); }, 60000);
+
+/* ===== Первый экран: лица мастеров рядом с кнопкой записи ===== */
+(function heroAvatars() {
+  const box = $('#heroAvatars');
+  if (!box) return;
+  box.innerHTML = BARBERS.slice(0, 3)
+    .map(b => `<img src="${IMG(b.img, 96)}" alt="" width="40" height="40" loading="lazy">`).join('');
+})();
+
+/* Мессенджеры в шапке: на демо-сайте настоящих аккаунтов нет, поэтому честно об этом говорим */
+document.addEventListener('click', e => {
+  const link = e.target.closest('[data-demo-msg]');
+  if (!link) return;
+  e.preventDefault();
+  toast(`Демо-сайт: здесь откроется ${link.dataset.demoMsg} барбершопа`);
+});
