@@ -665,3 +665,18 @@ button, a, summary, label { touch-action: manipulation; }
 
 /* иконка записи на главных кнопках: чуть крупнее и толще, чтобы читалась на оранжевом */
 .ic--book { width: 21px; height: 21px; stroke-width: 2.1; margin-left: -2px; }
+
+/* ===== Бейдж скидки на главной кнопке ===== */
+.btn--offer { position: relative; overflow: visible; }
+.offer-badge {
+  position: absolute; top: -11px; right: -8px;
+  padding: 4px 9px; border-radius: 999px; white-space: nowrap; /* всегда одной строкой */
+  background: var(--text); color: #171717; /* грязно-белый на акценте: 15:1 по контрасту с текстом */
+  font: 800 13px/1 var(--sans); letter-spacing: -.01em; font-variant-numeric: tabular-nums;
+  box-shadow: 0 6px 16px -6px rgba(0, 0, 0, .6), 0 0 0 2px var(--bg);
+  transform: rotate(6deg); transition: transform .2s var(--ease);
+  pointer-events: none;
+}
+.btn--offer:hover .offer-badge { transform: rotate(0deg) scale(1.06); }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+@media (prefers-reduced-motion: reduce) { .offer-badge, .btn--offer:hover .offer-badge { transition: none; transform: none; } }
