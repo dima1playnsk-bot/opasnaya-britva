@@ -662,3 +662,6 @@ button, a, summary, label { touch-action: manipulation; }
 .map-pin { color: var(--gold); cursor: pointer; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .5)); }
 .map-pin:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; border-radius: 8px; }
 .map-metro { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #c0392b; color: #fff; font: 700 13px/1 var(--sans); border: 2px solid #171717; }
+
+/* иконка записи на главных кнопках: чуть крупнее и толще, чтобы читалась на оранжевом */
+.ic--book { width: 21px; height: 21px; stroke-width: 2.1; margin-left: -2px; }

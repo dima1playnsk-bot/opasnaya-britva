@@ -625,12 +625,7 @@ function renderMyBooking() {}
 /* ===== Ближайшее время и свободные окна ===== */
 function refreshAvailability() {
   const n = nearestSlot('haircut');
-  if (n) {
-    $('#mobileBookSub').textContent = `${dayLabel(n.key)} в ${toTime(n.t)}`;
-    $('#reviewsNearest').textContent = `Ближайшее свободное время: ${dayLabel(n.key)} в ${toTime(n.t)}`;
-  } else {
-    $('#reviewsNearest').textContent = '';
-  }
+  if (n) $('#mobileBookSub').textContent = `${dayLabel(n.key)} в ${toTime(n.t)}`;
   $$('[data-free]').forEach(el => {
     const f = nearestSlot('haircut', el.dataset.free);
     el.textContent = f ? `Свободен ${dayLabel(f.key)} в ${toTime(f.t)}` : '';
