@@ -26,7 +26,7 @@
         imagesrcset="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=70&auto=format&fit=crop 800w, https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1280&q=72&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=75&auto=format&fit=crop 1920w"
         imagesizes="100vw" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=4.0">
+  <link rel="stylesheet" href="styles.css?v=4.1">
 
   <script type="application/ld+json">
   {
@@ -149,7 +149,7 @@
         <div class="hero__content">
           <p class="hero__where"><span class="status" id="openStatus">Ежедневно 10:00–22:00</span><span>ул.&nbsp;Цирюльная,&nbsp;7</span></p>
           <p class="hero__kicker">Мужской барбершоп в центре Новосибирска</p>
-          <h1 class="hero__title">Мужская стрижка, которая <mark>держит форму</mark> до&nbsp;следующего визита</h1>
+          <h1 class="hero__title">Стрижка, которая <mark>держит форму</mark> до&nbsp;следующего визита</h1>
           <p class="hero__lead">Стрижём, оформляем бороду и бреем опасной бритвой. Работаем по записи минута в минуту, а если через неделю что-то не понравится, поправим бесплатно.</p>
           <div class="hero__cta">
             <button class="btn btn--gold btn--lg" type="button" data-book>
@@ -169,7 +169,6 @@
       </div>
     </section>
 
-    <div class="pole" aria-hidden="true"></div>
 
     <!-- SERVICES -->
     <section class="section section--alt" id="services">
@@ -179,7 +178,8 @@
           <p class="section__lead">Цены окончательные, без «от» и звёздочек. У каждой услуги их две: у барбера и у топ-барбера со стажем больше 8&nbsp;лет.</p>
         </header>
         <div class="tabs" role="tablist" aria-label="Категории услуг" id="serviceTabs">
-          <button role="tab" aria-selected="true" data-cat="all" aria-controls="priceList">Все</button>
+          <button role="tab" aria-selected="true" data-cat="popular" aria-controls="priceList">Популярные</button>
+          <button role="tab" aria-selected="false" data-cat="all" aria-controls="priceList">Все</button>
           <button role="tab" aria-selected="false" data-cat="hair" aria-controls="priceList">Стрижки</button>
           <button role="tab" aria-selected="false" data-cat="beard" aria-controls="priceList">Борода и бритьё</button>
           <button role="tab" aria-selected="false" data-cat="combo" aria-controls="priceList">Комплексы</button>
@@ -378,7 +378,6 @@
     </section>
 
     <!-- FINAL CTA -->
-    <div class="pole" aria-hidden="true"></div>
     <section class="final">
       <div class="container final__inner">
         <h2>Запишитесь на удобное время</h2>
@@ -529,6 +528,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="script.js?v=4.0" defer></script>
+  <script src="script.js?v=4.1" defer></script>
 </body>
 </html>

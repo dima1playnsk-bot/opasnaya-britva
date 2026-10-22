@@ -157,15 +157,16 @@ function updateOpenStatus() {
 }
 
 /* ===== Услуги и цены ===== */
-// Во вкладке «Все» сначала только главные услуги: на телефоне полный прайс занимал больше двух экранов
-const priceState = { cat: 'all', expanded: false };
+// Сначала открыта вкладка «Популярные»: 3 услуги, которые берут чаще всего. Полный прайс — во вкладке «Все».
+const POPULAR = ['haircut', 'combo', 'fade'];
+const priceState = { cat: 'popular' };
 function renderPrices() {
-  const inCat = SERVICES.filter(s => priceState.cat === 'all' || s.cat === priceState.cat);
-  const collapsed = priceState.cat === 'all' && !priceState.expanded;
-  const list = collapsed ? inCat.filter(s => s.top) : inCat;
+  const { cat } = priceState;
+  const list = cat === 'popular' ? POPULAR.map(id => SERVICES.find(s => s.id === id))
+    : SERVICES.filter(s => cat === 'all' || s.cat === cat);
   const more = $('#priceMore');
-  more.hidden = !collapsed;
-  more.textContent = `Показать все услуги (${inCat.length})`;
+  more.hidden = cat !== 'popular';
+  more.textContent = `Показать все услуги (${SERVICES.length})`;
   $('#priceList').innerHTML = list.map(s => `
     <li class="price">
       <div class="price__info">
@@ -193,9 +194,9 @@ function bindToggleGroup(container, attr, onPick) {
   });
 }
 bindToggleGroup($('#serviceTabs'), 'aria-selected', b => { priceState.cat = b.dataset.cat; renderPrices(); });
+// «Показать все услуги» просто переключает на вкладку «Все»
 $('#priceMore').addEventListener('click', () => {
-  priceState.expanded = true;
-  renderPrices();
+  $('#serviceTabs [data-cat="all"]').click();
   $('#priceList').focus({ preventScroll: true }); // кнопка исчезла, фокус не должен улететь в начало страницы
 });
 
