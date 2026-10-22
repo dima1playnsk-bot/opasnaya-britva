@@ -653,3 +653,22 @@ button, a, summary, label { touch-action: manipulation; }
 @media (prefers-reduced-motion: reduce) {
   .header__actions > .btn, .mobile-bar { transition: none; }
 }
+
+/* ===== Интерактивная карта (Leaflet) ===== */
+/* обычные светлые плитки OSM перекрашиваем в тёмные: инверсия + поворот оттенка обратно */
+.map .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.6); }
+.map__canvas { position: absolute; inset: 0; }
+.map__fallback { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: var(--muted); font-size: 14px; }
+.map__btn { z-index: 1000; } /* поверх слоёв карты */
+.map .leaflet-container { background: #1c1c1c; font-family: var(--sans); }
+.map .leaflet-control-zoom { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.map .leaflet-control-zoom a { background: var(--card); color: var(--text); border-color: var(--line); width: 36px; height: 36px; line-height: 36px; }
+.map .leaflet-control-zoom a:hover { background: var(--card-2); color: var(--gold); }
+.map .leaflet-control-attribution { background: rgba(23, 23, 23, .75); color: var(--muted); font-size: 10px; }
+.map .leaflet-control-attribution a { color: var(--text); }
+.map .leaflet-popup-content-wrapper, .map .leaflet-popup-tip { background: var(--card); color: var(--text); box-shadow: var(--shadow); }
+.map .leaflet-popup-content { margin: 12px 16px; font-size: 14px; line-height: 1.4; }
+.map .leaflet-popup-content b { display: block; margin-bottom: 2px; }
+.map .leaflet-container a.leaflet-popup-close-button { color: var(--muted); }
+.map-pin { color: var(--gold); filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .5)); }
+.map-metro { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #c0392b; color: #fff; font: 700 13px/1 var(--sans); border: 2px solid #171717; }

@@ -718,3 +718,61 @@ document.addEventListener('click', e => {
     document.body.classList.toggle('hero-cta-visible', entry.isIntersecting);
   }).observe(cta);
 })();
+
+/* ===== Интерактивная карта =====
+   Leaflet + OpenStreetMap (без ключей; тёмной карту делает фильтр в CSS). Библиотеку грузим, только когда карта подъезжает к экрану,
+   чтобы не замедлять первый экран. Точка вымышленная: рядом с пл. Ленина в Новосибирске. */
+(function lazyMap() {
+  const el = $('#map');
+  if (!el) return;
+  const SHOP = [55.0285, 82.9245];
+  const METRO = [55.0302, 82.9204];
+  const LEAFLET = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/';
+
+  function load() {
+    const css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.href = LEAFLET + 'leaflet.min.css';
+    document.head.appendChild(css);
+    const js = document.createElement('script');
+    js.src = LEAFLET + 'leaflet.min.js';
+    js.onload = init;
+    js.onerror = () => { el.querySelector('.map__fallback').textContent = 'Карта не загрузилась. Адрес: ул. Цирюльная, 7'; };
+    document.head.appendChild(js);
+  }
+
+  function init() {
+    el.innerHTML = '';
+    const touch = matchMedia('(pointer: coarse)').matches;
+    const map = L.map(el, {
+      center: [55.0294, 82.9226], zoom: 16,
+      scrollWheelZoom: false,   // колесо мыши крутит страницу, а не карту
+      dragging: !touch,         // на телефоне один палец прокручивает страницу
+      tap: false,
+    });
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+    map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+
+    const pin = L.divIcon({
+      className: 'map-pin',
+      html: '<svg width="36" height="46" viewBox="0 0 36 46" aria-hidden="true"><path fill="currentColor" d="M18 46s18-15.6 18-28A18 18 0 0 0 0 18c0 12.4 18 28 18 28Z"/><circle cx="18" cy="18" r="7" fill="#171717"/></svg>',
+      iconSize: [36, 46], iconAnchor: [18, 46], popupAnchor: [0, -42],
+    });
+    L.marker(SHOP, { icon: pin, title: 'Опасная бритва' }).addTo(map)
+      .bindPopup('<b>Опасная бритва</b>ул. Цирюльная, 7, вход со двора<br>Ежедневно 10:00–22:00')
+      .openPopup();
+
+    const metro = L.divIcon({ className: '', html: '<span class="map-metro">М</span>', iconSize: [26, 26], iconAnchor: [13, 13] });
+    L.marker(METRO, { icon: metro, title: 'Метро «Площадь Ленина»', keyboard: false }).addTo(map)
+      .bindTooltip('Метро «Площадь Ленина»', { direction: 'top', offset: [0, -14] });
+  }
+
+  if (!('IntersectionObserver' in window)) return load();
+  const io = new IntersectionObserver(entries => {
+    if (entries.some(e => e.isIntersecting)) { io.disconnect(); load(); }
+  }, { rootMargin: '400px' });
+  io.observe(el);
+})();

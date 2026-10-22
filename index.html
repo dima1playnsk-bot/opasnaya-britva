@@ -26,7 +26,7 @@
         imagesrcset="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=70&auto=format&fit=crop 800w, https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1280&q=72&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=75&auto=format&fit=crop 1920w"
         imagesizes="100vw" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=4.4">
+  <link rel="stylesheet" href="styles.css?v=4.6">
 
   <script type="application/ld+json">
   {
@@ -351,26 +351,13 @@
             <a class="btn btn--ghost btn--sm" href="#" aria-label="Сообщество ВКонтакте">ВКонтакте</a>
           </div>
         </div>
-        <div class="map" role="img" aria-label="Схема проезда: барбершоп в двух кварталах от метро Площадь Ленина">
-          <svg viewBox="0 0 600 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <rect width="600" height="440" class="map__bg"/>
-            <g class="map__blocks">
-              <rect x="20" y="20" width="150" height="110" rx="6"/><rect x="200" y="20" width="170" height="110" rx="6"/><rect x="400" y="20" width="180" height="110" rx="6"/>
-              <rect x="20" y="170" width="150" height="110" rx="6"/><rect x="400" y="170" width="180" height="110" rx="6"/>
-              <rect x="20" y="320" width="150" height="100" rx="6"/><rect x="200" y="320" width="170" height="100" rx="6"/><rect x="400" y="320" width="180" height="100" rx="6"/>
-            </g>
-            <rect x="200" y="170" width="170" height="110" rx="6" class="map__square"/>
-            <g class="map__roads">
-              <line x1="0" y1="150" x2="600" y2="150"/><line x1="0" y1="300" x2="600" y2="300"/>
-              <line x1="185" y1="0" x2="185" y2="440"/><line x1="385" y1="0" x2="385" y2="440"/>
-            </g>
-            <path d="M285 225 C 330 225, 360 260, 385 300 S 450 330, 470 350" class="map__route"/>
-            <g transform="translate(285 225)"><circle r="16" class="map__metro"/><text y="6" text-anchor="middle" class="map__metro-t">М</text></g>
-            <text x="285" y="268" text-anchor="middle" class="map__label">пл. Ленина</text>
-            <g transform="translate(470 330)" class="map__pin"><path d="M0 22s-18-14-18-28a18 18 0 0 1 36 0C18 8 0 22 0 22Z"/><circle cy="-6" r="6" class="map__pin-dot"/></g>
-            <text x="470" y="385" text-anchor="middle" class="map__label map__label--gold">Опасная бритва</text>
-          </svg>
-          <a class="btn btn--gold btn--sm map__btn" href="https://yandex.ru/maps/65/novosibirsk/" target="_blank" rel="noopener">Построить маршрут</a>
+        <!-- Интерактивная карта: Leaflet + OpenStreetMap, без ключей; тёмной её делает фильтр в CSS.
+             Скрипт карты грузится, только когда блок подъезжает к экрану. -->
+        <div class="map">
+          <div class="map__canvas" id="map" role="region" aria-label="Карта: барбершоп «Опасная бритва», ул. Цирюльная, 7, рядом с метро «Площадь Ленина»">
+            <p class="map__fallback">Загружаем карту…</p>
+          </div>
+          <a class="btn btn--gold btn--sm map__btn" href="https://yandex.ru/maps/?rtext=~55.028500%2C82.924500&amp;rtt=auto" target="_blank" rel="noopener">Построить маршрут</a>
         </div>
       </div>
     </section>
@@ -526,6 +513,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="script.js?v=4.4" defer></script>
+  <script src="script.js?v=4.7" defer></script>
 </body>
 </html>
