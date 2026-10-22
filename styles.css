@@ -113,7 +113,6 @@ p { margin: 0; }
               linear-gradient(0deg, var(--bg) 0%, transparent 30%);
 }
 .hero__inner { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 48px; align-items: end; }
-.eyebrow { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
 .status { color: var(--text); font-weight: 600; }
 .status::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); margin-right: 8px; vertical-align: 1px; }
 .status.is-open::before { background: var(--ok); box-shadow: 0 0 0 4px rgba(74, 222, 128, .15); }
@@ -464,7 +463,6 @@ button, a, summary, label { touch-action: manipulation; }
 }
 .demo-badge:hover { border-color: var(--gold); color: var(--gold); }
 
-.eyebrow { display: flex; flex-wrap: wrap; gap: 6px 20px; }
 .section__title { margin-bottom: 40px; text-wrap: balance; }
 .section__head .section__title { margin-bottom: 0; }
 
@@ -535,3 +533,70 @@ button, a, summary, label { touch-action: manipulation; }
 
 /* ловушка для спам-ботов — скрыта от людей */
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* ===== v3: понятная структура ===== */
+/* Подпись над заголовком: сразу говорит, что это за место */
+.hero__kicker { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 18px; color: var(--gold); font-size: 15px; font-weight: 600; }
+.hero__kicker::before { content: ""; width: 28px; height: 2px; background: var(--gold); border-radius: 2px; }
+.hero__title { font-size: clamp(40px, 6.4vw, 80px); max-width: 12em; }
+.hero__how { margin-top: 14px; font-size: 14px; color: var(--muted); }
+.hero__trust { margin-top: 24px; }
+.hero__trust .status { font-weight: 500; }
+
+/* Как записаться: три шага в финальном блоке */
+.steps { list-style: none; counter-reset: step; margin: 8px 0 4px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; width: min(880px, 100%); text-align: left; }
+.steps li { counter-increment: step; display: grid; grid-template-columns: 44px 1fr; grid-template-rows: auto auto; column-gap: 14px; align-items: center; padding: 18px; background: var(--card); border: 1px solid var(--line); border-radius: var(--r); }
+.steps li::before { content: counter(step); grid-row: 1 / span 2; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--gold); color: var(--gold); font: 600 22px/1 var(--serif); }
+.steps b { font-weight: 600; }
+.steps span { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.final .btn { margin-top: 8px; }
+.final p { font-size: 14px; }
+
+@media (max-width: 900px) {
+  .steps { grid-template-columns: 1fr; max-width: 420px; }
+}
+@media (max-width: 640px) {
+  .hero__kicker { font-size: clamp(12px, 3.5vw, 14px); margin-bottom: 12px; white-space: nowrap; }
+  .hero__kicker::before { display: none; }
+  .hero__lead { margin-top: 18px; }
+  .hero__cta { margin-top: 28px; }
+  .hero__trust { flex-direction: column; gap: 6px; }
+}
+.steps li::before { font: 600 18px/1 var(--sans); }
+/* номер уже озвучивает сам список <ol>, цифру из CSS диктору не читаем */
+.steps li::before { content: counter(step) / ""; }
+.price-list:focus { outline: none; }
+.prices__more {
+  display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px; margin-top: 16px;
+  border: 1px dashed rgba(212, 168, 83, .45); border-radius: var(--r); background: transparent; color: var(--gold);
+  font-weight: 600; font-size: 15px; cursor: pointer; transition: border-color .2s, background-color .2s;
+}
+.prices__more:hover { border-color: var(--gold); background: rgba(212, 168, 83, .08); }
+.final h2 { text-wrap: balance; }
+/* Прайс на телефоне: цены и кнопка в одну строку, строка услуги короче */
+@media (max-width: 640px) {
+  .price { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; align-items: end; gap: 10px 12px; padding: 16px 0; }
+  .price__value { font-size: 22px; }
+  .price__book { grid-column: auto; justify-self: end; padding: 8px 14px; }
+}
+.prices__hint { margin-top: 20px; color: var(--muted); font-size: 15px; }
+.prices__hint .link--btn { padding: 0; font-size: inherit; min-height: 0; text-decoration: underline; text-underline-offset: 4px; }
+/* Кнопка записи сразу после отзывов: человек прочитал отзывы и готов записаться */
+.section__cta { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; margin-top: 32px; }
+.section__cta-note { color: var(--muted); font-size: 14px; }
+.section__cta-note:empty { display: none; }
+@media (max-width: 640px) {
+  .section__cta .btn { flex: 1 1 100%; }
+  .section__cta-note { width: 100%; text-align: center; }
+}
+/* Галерея на телефоне: 2 колонки вместо 4, иначе фото размером с ноготь */
+@media (max-width: 640px) {
+  .gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 170px; }
+}
+/* Мобильное меню: сплошной фон, чтобы заголовок первого экрана не просвечивал */
+@media (max-width: 900px) {
+  .nav { background: var(--bg); box-shadow: 0 24px 40px -12px rgba(0, 0, 0, .8); }
+  .header:has(.nav.is-open) { background: var(--bg); border-color: var(--line); }
+}
+/* Статус и адрес рядом, но без запятой: ночью «Сейчас закрыто, откроемся в 10:00» не сливается с адресом */
+.hero__where { display: inline-flex; flex-wrap: wrap; gap: 4px 14px; }

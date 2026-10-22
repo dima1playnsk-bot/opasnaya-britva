@@ -26,7 +26,7 @@
         imagesrcset="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&q=70&auto=format&fit=crop 800w, https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1280&q=72&auto=format&fit=crop 1280w, https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=1920&q=75&auto=format&fit=crop 1920w"
         imagesizes="100vw" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=3.9">
 
   <script type="application/ld+json">
   {
@@ -142,18 +142,20 @@
       </div>
       <div class="container hero__inner">
         <div class="hero__content">
-          <p class="eyebrow"><span class="status" id="openStatus">Ежедневно 10:00–22:00</span><span>Новосибирск, ул.&nbsp;Цирюльная,&nbsp;7</span></p>
-          <h1 class="hero__title">Стрижка, которая держит форму до&nbsp;следующего визита</h1>
-          <p class="hero__lead">Стрижём по записи минута в минуту и бреем опасной бритвой с горячим полотенцем. Если через неделю что-то не понравится, поправим бесплатно.</p>
+          <p class="hero__kicker">Мужской барбершоп в центре Новосибирска</p>
+          <h1 class="hero__title">Мужская стрижка, которая держит форму до&nbsp;следующего визита</h1>
+          <p class="hero__lead">Стрижём, оформляем бороду и бреем опасной бритвой. Работаем по записи минута в минуту, а если через неделю что-то не понравится, поправим бесплатно.</p>
           <div class="hero__cta">
             <button class="btn btn--gold btn--lg" type="button" data-book>
-              <svg class="ic"><use href="#i-calendar"/></svg>Выбрать время
+              <svg class="ic"><use href="#i-calendar"/></svg>Записаться онлайн
             </button>
-            <a class="btn btn--ghost btn--lg" href="#services">Цены на услуги</a>
+            <a class="btn btn--ghost btn--lg" href="#services">Услуги и цены</a>
           </div>
+          <p class="hero__how">Запись за минуту: выберите услугу, мастера и свободное время.</p>
           <ul class="hero__trust">
             <li><span class="stars" aria-hidden="true">★★★★★</span> <b>4,9</b> на Яндекс Картах</li>
             <li><b>−15%</b> на первую стрижку онлайн</li>
+            <li class="hero__where"><span class="status" id="openStatus">Ежедневно 10:00–22:00</span><span>ул.&nbsp;Цирюльная,&nbsp;7</span></li>
           </ul>
         </div>
 
@@ -161,7 +163,7 @@
           <div id="slotDefault">
             <p class="slot-card__label">Ближайшее свободное время</p>
             <p class="slot-card__time" id="nearestSlot">сегодня</p>
-            <p class="slot-card__meta" id="nearestMeta">Мужская стрижка, 60&nbsp;минут</p>
+            <p class="slot-card__meta" id="nearestMeta">Мужская стрижка, 60&nbsp;минут, 1&nbsp;800&nbsp;₽</p>
             <button class="btn btn--gold btn--block" type="button" id="nearestBtn">Занять это время</button>
             <p class="slot-card__note">Онлайн-запись работает круглосуточно</p>
           </div>
@@ -178,10 +180,50 @@
 
     <div class="pole" aria-hidden="true"></div>
 
+    <!-- SERVICES -->
+    <section class="section section--alt" id="services">
+      <div class="container">
+        <header class="section__head">
+          <h2 class="section__title">Услуги и цены</h2>
+          <p class="section__lead">Цены окончательные, без «от» и звёздочек. У каждой услуги их две: у барбера и у топ-барбера со стажем больше 8&nbsp;лет.</p>
+        </header>
+        <div class="tabs" role="tablist" aria-label="Категории услуг" id="serviceTabs">
+          <button role="tab" aria-selected="true" data-cat="all" aria-controls="priceList">Все</button>
+          <button role="tab" aria-selected="false" data-cat="hair" aria-controls="priceList">Стрижки</button>
+          <button role="tab" aria-selected="false" data-cat="beard" aria-controls="priceList">Борода и бритьё</button>
+          <button role="tab" aria-selected="false" data-cat="combo" aria-controls="priceList">Комплексы</button>
+          <button role="tab" aria-selected="false" data-cat="kids" aria-controls="priceList">Детям</button>
+        </div>
+        <div class="prices" role="tabpanel" aria-labelledby="serviceTabs">
+          <div class="prices__head" aria-hidden="true"><span>Услуга</span><span>Барбер</span><span>Топ-барбер</span><span></span></div>
+          <ul class="price-list" id="priceList" tabindex="-1"></ul>
+        </div>
+        <button class="prices__more" type="button" id="priceMore" aria-controls="priceList" hidden>Показать все услуги</button>
+        <p class="prices__hint">Не знаете, что выбрать? <button class="link link--btn" type="button" data-book data-service="haircut">Запишитесь на мужскую стрижку</button>: мастер подберёт форму на консультации.</p>
+        <noscript><p class="section__lead">Чтобы увидеть цены и записаться онлайн, включите JavaScript или позвоните: <a href="tel:+73830000000">+7 (383) 000-00-00</a>.</p></noscript>
+      </div>
+    </section>
+
+    <!-- OFFERS -->
+    <section class="offers" id="offers" aria-labelledby="offersTitle">
+      <div class="container offers__inner">
+        <h2 id="offersTitle" class="offers__title">Скидки и подарки</h2>
+        <ul class="offers__list">
+          <li><b>−15%</b> на первую стрижку при онлайн-записи</li>
+          <li><b>−500&nbsp;₽</b> вам за каждого приведённого друга</li>
+          <li><b>½ цены</b> на каждую шестую стрижку</li>
+        </ul>
+        <button class="btn btn--ghost" type="button" id="giftOpen"><svg class="ic" aria-hidden="true"><use href="#i-gift"/></svg>Подарочный сертификат</button>
+      </div>
+    </section>
+
     <!-- WHY -->
     <section class="section" id="why">
       <div class="container">
-        <h2 class="section__title">Четыре правила, которые мы не нарушаем</h2>
+        <header class="section__head">
+          <h2 class="section__title">Чем мы отличаемся от парикмахерской у&nbsp;дома</h2>
+          <p class="section__lead">Четыре правила, которые мы не нарушаем.</p>
+        </header>
         <ul class="rules">
           <li>
             <svg class="ic ic--lg" aria-hidden="true"><use href="#i-clock"/></svg>
@@ -207,30 +249,8 @@
       </div>
     </section>
 
-    <!-- SERVICES -->
-    <section class="section section--alt" id="services">
-      <div class="container">
-        <header class="section__head">
-          <h2 class="section__title">Цены без «от» и звёздочек</h2>
-          <p class="section__lead">У каждой услуги две цены: у барбера и у топ-барбера со стажем больше 8&nbsp;лет.</p>
-        </header>
-        <div class="tabs" role="tablist" aria-label="Категории услуг" id="serviceTabs">
-          <button role="tab" aria-selected="true" data-cat="all" aria-controls="priceList">Все</button>
-          <button role="tab" aria-selected="false" data-cat="hair" aria-controls="priceList">Стрижки</button>
-          <button role="tab" aria-selected="false" data-cat="beard" aria-controls="priceList">Борода и бритьё</button>
-          <button role="tab" aria-selected="false" data-cat="combo" aria-controls="priceList">Комплексы</button>
-          <button role="tab" aria-selected="false" data-cat="kids" aria-controls="priceList">Детям</button>
-        </div>
-        <div class="prices" role="tabpanel" aria-labelledby="serviceTabs">
-          <div class="prices__head" aria-hidden="true"><span>Услуга</span><span>Барбер</span><span>Топ-барбер</span><span></span></div>
-          <ul class="price-list" id="priceList"></ul>
-        </div>
-        <noscript><p class="section__lead">Чтобы увидеть цены и записаться онлайн, включите JavaScript или позвоните: <a href="tel:+73830000000">+7 (383) 000-00-00</a>.</p></noscript>
-      </div>
-    </section>
-
     <!-- BARBERS -->
-    <section class="section" id="barbers">
+    <section class="section section--alt" id="barbers">
       <div class="container">
         <header class="section__head">
           <h2 class="section__title">Барберы</h2>
@@ -242,7 +262,7 @@
     </section>
 
     <!-- WORKS -->
-    <section class="section section--alt" id="works">
+    <section class="section" id="works">
       <div class="container">
         <header class="section__head">
           <h2 class="section__title">Работы</h2>
@@ -260,7 +280,7 @@
     </section>
 
     <!-- REVIEWS -->
-    <section class="section" id="reviews">
+    <section class="section section--alt" id="reviews">
       <div class="container">
         <header class="section__head section__head--row">
           <h2 class="section__title">Отзывы</h2>
@@ -286,30 +306,25 @@
             <figcaption><b>Андрей В.</b><span>Яндекс Карты, октябрь 2026</span></figcaption>
           </figure>
         </div>
-      </div>
-    </section>
-
-    <!-- OFFERS -->
-    <section class="offers" id="offers" aria-labelledby="offersTitle">
-      <div class="container offers__inner">
-        <h2 id="offersTitle" class="offers__title">Скидки и подарки</h2>
-        <ul class="offers__list">
-          <li><b>−15%</b> на первую стрижку при онлайн-записи</li>
-          <li><b>−500&nbsp;₽</b> вам за каждого приведённого друга</li>
-          <li><b>½ цены</b> на каждую шестую стрижку</li>
-        </ul>
-        <button class="btn btn--ghost" type="button" id="giftOpen"><svg class="ic" aria-hidden="true"><use href="#i-gift"/></svg>Подарочный сертификат</button>
+        <div class="section__cta">
+          <button class="btn btn--gold" type="button" data-book><svg class="ic" aria-hidden="true"><use href="#i-calendar"/></svg>Записаться онлайн</button>
+          <p class="section__cta-note" id="reviewsNearest"></p>
+        </div>
       </div>
     </section>
 
     <!-- FAQ -->
-    <section class="section section--alt" id="faq">
+    <section class="section" id="faq">
       <div class="container container--narrow">
         <h2 class="section__title">Частые вопросы</h2>
         <div class="faq">
           <details>
             <summary>Почему дороже, чем в парикмахерской у дома?</summary>
             <p>Мы стрижём час, а не 20 минут: консультация, мытьё головы, ножницы и укладка. Форма держится 3–4 недели, поэтому стричься приходится реже.</p>
+          </details>
+          <details>
+            <summary>Что такое фейд и камуфляж седины?</summary>
+            <p>Фейд — стрижка с плавным переходом: на висках и затылке волосы почти под ноль, а выше длина постепенно растёт. Камуфляж седины — тонирование, после которого седина становится мягче и выглядит естественно, без эффекта крашеных волос.</p>
           </details>
           <details>
             <summary>Можно прийти без записи?</summary>
@@ -332,7 +347,7 @@
     </section>
 
     <!-- CONTACTS -->
-    <section class="section" id="contacts">
+    <section class="section section--alt" id="contacts">
       <div class="container contacts">
         <div class="contacts__info">
           <h2 class="section__title">Как нас найти</h2>
@@ -376,10 +391,15 @@
     <section class="final">
       <div class="container final__inner">
         <h2>Запишитесь на удобное время</h2>
-        <p>Запись занимает минуту. Подтверждение придёт на телефон, а перенести визит можно бесплатно, если предупредить за 3 часа.</p>
+        <ol class="steps" aria-label="Как записаться">
+          <li><b>Выберите услугу</b><span>Цена и длительность видны сразу</span></li>
+          <li><b>Выберите мастера</b><span>Или любого свободного по цене барбера</span></li>
+          <li><b>Выберите время</b><span>Подтверждение придёт на телефон</span></li>
+        </ol>
         <button class="btn btn--gold btn--lg" type="button" data-book>
-          <svg class="ic"><use href="#i-calendar"/></svg>Выбрать время
+          <svg class="ic"><use href="#i-calendar"/></svg>Записаться онлайн
         </button>
+        <p>Запись занимает минуту. Перенести визит можно бесплатно, если предупредить за&nbsp;3&nbsp;часа.</p>
       </div>
     </section>
   </main>
@@ -518,6 +538,6 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="script.js" defer></script>
+  <script src="script.js?v=3.10" defer></script>
 </body>
 </html>

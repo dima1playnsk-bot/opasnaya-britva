@@ -12,15 +12,16 @@ const CATS = { hair: 'Стрижки', beard: 'Борода и бритьё', co
 
 // price: [барбер, топ-барбер]
 const SERVICES = [
-  { id: 'haircut', cat: 'hair', name: 'Мужская стрижка', desc: 'Консультация, ножницы и машинка, мытьё головы, укладка', dur: 60, price: [1800, 2300], hit: true },
-  { id: 'fade', cat: 'hair', name: 'Фейд', desc: 'Плавный переход от кожи, чёткий контур, укладка', dur: 60, price: [2000, 2500] },
+  // top: показываем во вкладке «Все» до нажатия «Показать все услуги»
+  { id: 'haircut', cat: 'hair', name: 'Мужская стрижка', desc: 'Консультация, ножницы и машинка, мытьё головы, укладка', dur: 60, price: [1800, 2300], hit: true, top: true },
+  { id: 'fade', cat: 'hair', name: 'Фейд', desc: 'Плавный переход от кожи, чёткий контур, укладка', dur: 60, price: [2000, 2500], top: true },
   { id: 'buzz', cat: 'hair', name: 'Стрижка машинкой', desc: 'Одна-две насадки и окантовка, без укладки', dur: 30, price: [1100, 1400] },
   { id: 'long', cat: 'hair', name: 'Удлинённая стрижка', desc: 'Для волос длиннее 10 см: ножницы, филировка, укладка', dur: 90, price: [2200, 2700] },
-  { id: 'beard', cat: 'beard', name: 'Моделирование бороды', desc: 'Форма, контур опасной бритвой, распаривание, масло', dur: 30, price: [1200, 1500] },
-  { id: 'shave', cat: 'beard', name: 'Королевское бритьё', desc: 'Горячие полотенца, опасная бритва, охлаждающий компресс', dur: 60, price: [1900, 2300] },
+  { id: 'beard', cat: 'beard', name: 'Моделирование бороды', desc: 'Форма, контур опасной бритвой, распаривание, масло', dur: 30, price: [1200, 1500], top: true },
+  { id: 'shave', cat: 'beard', name: 'Королевское бритьё', desc: 'Горячие полотенца, опасная бритва, охлаждающий компресс', dur: 60, price: [1900, 2300], top: true },
   { id: 'grey', cat: 'beard', name: 'Камуфляж седины', desc: 'Тонирование волос или бороды в естественный оттенок', dur: 30, price: [1200, 1200] },
-  { id: 'combo', cat: 'combo', name: 'Стрижка + борода', desc: 'Полный образ за один визит', dur: 90, price: [2800, 3400], hit: true },
-  { id: 'fatherson', cat: 'combo', name: 'Отец + сын', desc: 'Две стрижки в соседних креслах, сыну до 12 лет', dur: 60, price: [3000, 3600], seats: 2 },
+  { id: 'combo', cat: 'combo', name: 'Стрижка + борода', desc: 'Полный образ за один визит', dur: 90, price: [2800, 3400], hit: true, top: true },
+  { id: 'fatherson', cat: 'combo', name: 'Отец + сын', desc: 'Две стрижки в соседних креслах, сыну до 12 лет', dur: 60, price: [3000, 3600], seats: 2, top: true },
   { id: 'ritual', cat: 'combo', name: 'Полный ритуал', desc: 'Стрижка, королевское бритьё, камуфляж седины, уход за лицом', dur: 150, price: [4900, 5800] },
   { id: 'kids', cat: 'kids', name: 'Детская стрижка', desc: 'С 4 до 12 лет, мультики на планшете', dur: 30, price: [1300, 1600] },
 ];
@@ -141,6 +142,7 @@ function setMenu(open) {
   nav.classList.toggle('is-open', open);
   burger.setAttribute('aria-expanded', String(open));
   burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+  $('use', burger).setAttribute('href', open ? '#i-x' : '#i-menu'); // крестик показывает, как закрыть меню
 }
 burger.addEventListener('click', () => setMenu(!nav.classList.contains('is-open')));
 nav.addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
@@ -155,9 +157,15 @@ function updateOpenStatus() {
 }
 
 /* ===== Услуги и цены ===== */
-const priceState = { cat: 'all' };
+// Во вкладке «Все» сначала только главные услуги: на телефоне полный прайс занимал больше двух экранов
+const priceState = { cat: 'all', expanded: false };
 function renderPrices() {
-  const list = SERVICES.filter(s => priceState.cat === 'all' || s.cat === priceState.cat);
+  const inCat = SERVICES.filter(s => priceState.cat === 'all' || s.cat === priceState.cat);
+  const collapsed = priceState.cat === 'all' && !priceState.expanded;
+  const list = collapsed ? inCat.filter(s => s.top) : inCat;
+  const more = $('#priceMore');
+  more.hidden = !collapsed;
+  more.textContent = `Показать все услуги (${inCat.length})`;
   $('#priceList').innerHTML = list.map(s => `
     <li class="price">
       <div class="price__info">
@@ -185,6 +193,11 @@ function bindToggleGroup(container, attr, onPick) {
   });
 }
 bindToggleGroup($('#serviceTabs'), 'aria-selected', b => { priceState.cat = b.dataset.cat; renderPrices(); });
+$('#priceMore').addEventListener('click', () => {
+  priceState.expanded = true;
+  renderPrices();
+  $('#priceList').focus({ preventScroll: true }); // кнопка исчезла, фокус не должен улететь в начало страницы
+});
 
 /* ===== Барберы ===== */
 function renderBarbers() {
@@ -649,13 +662,18 @@ $('#myCancel').addEventListener('click', e => {
 /* ===== Ближайшее время и свободные окна ===== */
 function refreshAvailability() {
   const n = nearestSlot('haircut');
+  // Цена прямо на первом экране: человек сразу видит, что и сколько стоит
+  const cut = svc('haircut');
+  $('#nearestMeta').textContent = `${cut.name}, ${cut.dur} минут, ${rub(cut.price[0])}`;
   const btn = $('#nearestBtn');
   if (n) {
     $('#nearestSlot').textContent = `${dayLabel(n.key)} в ${toTime(n.t)}`;
     $('#mobileBookSub').textContent = `${dayLabel(n.key)} в ${toTime(n.t)}`;
+    $('#reviewsNearest').textContent = `Ближайшее свободное время: ${dayLabel(n.key)} в ${toTime(n.t)}`;
     btn.onclick = () => openBooking({ service: 'haircut', barber: 'any', date: n.key, time: toTime(n.t) });
   } else {
     $('#nearestSlot').textContent = 'уточните по телефону';
+    $('#reviewsNearest').textContent = '';
     btn.onclick = () => openBooking();
   }
   $$('[data-free]').forEach(el => {
@@ -699,10 +717,15 @@ function initReveal() {
   const spy = new IntersectionObserver(entries => {
     entries.forEach(en => {
       if (!en.isIntersecting) return;
-      links.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + en.target.id));
+      links.forEach(a => {
+        const on = a.getAttribute('href') === '#' + en.target.id;
+        a.classList.toggle('is-active', on);
+        if (on) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current'); // диктор слышит, где сейчас человек
+      });
     });
   }, { rootMargin: '-45% 0px -50% 0px' });
-  ['services', 'barbers', 'works', 'reviews', 'contacts'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
+  // Следим и за блоками без пункта в меню: на первом экране и в «Вопросах» подсветка снимается
+  ['top', 'services', 'offers', 'why', 'barbers', 'works', 'reviews', 'faq', 'contacts'].forEach(id => { const s = document.getElementById(id); if (s) spy.observe(s); });
 }
 
 /* ===== Старт ===== */
