@@ -642,3 +642,14 @@ button, a, summary, label { touch-action: manipulation; }
 @media (max-width: 380px) {
   .demo-badge { display: none; } /* на самых узких экранах пометка остаётся в подвале */
 }
+
+/* Одна кнопка записи на первом экране: дополнительные (в шапке и в нижней панели)
+   появляются, только когда главная кнопка уехала с экрана */
+.header__actions > .btn, .mobile-bar { transition: opacity .25s, transform .3s var(--ease), visibility .25s; }
+.hero-cta-visible .header__actions > .btn { opacity: 0; visibility: hidden; pointer-events: none; }
+@media (max-width: 640px) {
+  .hero-cta-visible .mobile-bar { transform: translateY(110%); visibility: hidden; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .header__actions > .btn, .mobile-bar { transition: none; }
+}

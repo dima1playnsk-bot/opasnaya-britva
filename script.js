@@ -626,55 +626,18 @@ function upcomingBooking() {
     .filter(b => b.barberId && (b.date > now.key || (b.date === now.key && toMin(b.time) > now.min)))
     .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time))[0] || null;
 }
-function renderMyBooking() {
-  const b = upcomingBooking();
-  $('#slotDefault').hidden = !!b;
-  $('#myBooking').hidden = !b;
-  if (!b) return;
-  $('#myTime').textContent = `${dayLabel(b.date)} в ${b.time}`;
-  $('#myMeta').textContent = `${b.service}, мастер ${b.barber.split(' ')[0]}, ${rub(b.price)}`;
-  $('#myCancel').dataset.id = b.createdAt;
-}
-let cancelTimer;
-$('#myCancel').addEventListener('click', e => {
-  const btn = e.currentTarget;
-  // Отмена необратима: первое нажатие только просит подтвердить
-  if (btn.dataset.armed !== '1') {
-    btn.dataset.armed = '1';
-    btn.textContent = 'Нажмите ещё раз, чтобы отменить';
-    clearTimeout(cancelTimer);
-    cancelTimer = setTimeout(() => { btn.dataset.armed = ''; btn.textContent = 'Отменить запись'; }, 4000);
-    return;
-  }
-  clearTimeout(cancelTimer);
-  btn.dataset.armed = '';
-  btn.textContent = 'Отменить запись';
-  try {
-    localStorage.setItem(BOOKINGS_KEY, JSON.stringify(loadBookings().filter(x => x.createdAt !== btn.dataset.id)));
-  } catch (_) { /* нет доступа к хранилищу */ }
-  // Позже здесь же сообщим об отмене администратору через Telegram-бота
-  rebuildOwnBusy();
-  refreshAvailability();
-  renderMyBooking();
-  toast('Запись отменена, время снова свободно');
-});
+// Карточку «Ближайшее время / Вы записаны» убрали с первого экрана: кнопок записи было слишком много.
+// Функцию оставили пустой, чтобы не трогать места, где она вызывается.
+function renderMyBooking() {}
 
 /* ===== Ближайшее время и свободные окна ===== */
 function refreshAvailability() {
   const n = nearestSlot('haircut');
-  // Цена прямо на первом экране: человек сразу видит, что и сколько стоит
-  const cut = svc('haircut');
-  $('#nearestMeta').textContent = `${cut.name}, ${cut.dur} минут, ${rub(cut.price[0])}`;
-  const btn = $('#nearestBtn');
   if (n) {
-    $('#nearestSlot').textContent = `${dayLabel(n.key)} в ${toTime(n.t)}`;
     $('#mobileBookSub').textContent = `${dayLabel(n.key)} в ${toTime(n.t)}`;
     $('#reviewsNearest').textContent = `Ближайшее свободное время: ${dayLabel(n.key)} в ${toTime(n.t)}`;
-    btn.onclick = () => openBooking({ service: 'haircut', barber: 'any', date: n.key, time: toTime(n.t) });
   } else {
-    $('#nearestSlot').textContent = 'уточните по телефону';
     $('#reviewsNearest').textContent = '';
-    btn.onclick = () => openBooking();
   }
   $$('[data-free]').forEach(el => {
     const f = nearestSlot('haircut', el.dataset.free);
@@ -754,3 +717,12 @@ document.addEventListener('click', e => {
   e.preventDefault();
   toast(`Демо-сайт: здесь откроется ${link.dataset.demoMsg} барбершопа`);
 });
+
+/* Пока главная кнопка «Записаться онлайн» на экране, дублирующие кнопки спрятаны */
+(function singleHeroCta() {
+  const cta = $('.hero__cta');
+  if (!cta || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(([entry]) => {
+    document.body.classList.toggle('hero-cta-visible', entry.isIntersecting);
+  }).observe(cta);
+})();
