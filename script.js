@@ -205,7 +205,6 @@ function renderBarbers() {
         <p class="barber__spec">${b.spec}</p>
         <p class="barber__rating"><span class="stars" aria-hidden="true">★</span> ${b.rating} (${b.reviews} ${plural(b.reviews, ['отзыв', 'отзыва', 'отзывов'])})</p>
         <p class="barber__free" data-free="${b.id}"></p>
-        <button class="btn btn--ghost btn--sm" type="button" data-book data-barber="${b.id}">Записаться к ${b.dative}</button>
       </div>
     </article>`).join('');
 }
