@@ -720,54 +720,109 @@ document.addEventListener('click', e => {
 })();
 
 /* ===== Интерактивная карта =====
-   Leaflet + OpenStreetMap (без ключей; тёмной карту делает фильтр в CSS). Библиотеку грузим, только когда карта подъезжает к экрану,
-   чтобы не замедлять первый экран. Точка вымышленная: рядом с пл. Ленина в Новосибирске. */
+   MapLibre + OpenFreeMap: бесплатно, без ключей, векторная — поэтому её можно перекрасить в цвета сайта
+   и убрать лишнее (железные дороги, стрелки, границы). Библиотеку грузим, только когда карта подъезжает
+   к экрану, чтобы не замедлять первый экран. Точка вымышленная: рядом с пл. Ленина в Новосибирске. */
 (function lazyMap() {
   const el = $('#map');
   if (!el) return;
-  const SHOP = [55.0285, 82.9245];
-  const METRO = [55.0302, 82.9204];
-  const LEAFLET = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/';
+  const SHOP = [82.9245, 55.0285];   // [долгота, широта]
+  const METRO = [82.9204, 55.0302];
+  const LIB = 'https://cdnjs.cloudflare.com/ajax/libs/maplibre-gl/4.7.1/';
+
+  // Палитра карты — из палитры сайта
+  const C = {
+    bg: '#171717', block: '#1c1c1c', park: '#1b201b', water: '#18222a', building: '#222121',
+    road: '#2b2a29', roadMajor: '#363432', label: '#8f897f', halo: '#171717',
+  };
+  const HIDE = /^(road_oneway|railway|aeroway|boundary|landcover_(ice|glacier)|road_area_pier|road_pier|highway_path)/;
+
+  function restyle(map) {
+    for (const layer of map.getStyle().layers) {
+      const { id, type } = layer;
+      if (HIDE.test(id)) { map.setLayoutProperty(id, 'visibility', 'none'); continue; }
+      if (type === 'background') map.setPaintProperty(id, 'background-color', C.bg);
+      else if (id === 'water') map.setPaintProperty(id, 'fill-color', C.water);
+      else if (id === 'waterway') map.setPaintProperty(id, 'line-color', C.water);
+      else if (/landuse_park|landcover_wood/.test(id)) { map.setPaintProperty(id, 'fill-color', C.park); map.setPaintProperty(id, 'fill-opacity', 1); }
+      else if (id === 'landuse_residential') map.setPaintProperty(id, 'fill-color', C.block);
+      else if (id === 'building') { map.setPaintProperty(id, 'fill-color', C.building); map.setPaintProperty(id, 'fill-outline-color', C.building); }
+      else if (/^highway_(major|motorway)/.test(id)) map.setPaintProperty(id, 'line-color', C.roadMajor);
+      else if (id === 'highway_minor') map.setPaintProperty(id, 'line-color', C.road);
+      else if (type === 'symbol') {
+        // подписи: по-русски, приглушённые, без лишних мелких мест
+        if (/^place_(village|state|country)/.test(id)) { map.setLayoutProperty(id, 'visibility', 'none'); continue; }
+        map.setLayoutProperty(id, 'text-field', ['coalesce', ['get', 'name:ru'], ['get', 'name']]);
+        map.setPaintProperty(id, 'text-color', C.label);
+        map.setPaintProperty(id, 'text-halo-color', C.halo);
+        map.setPaintProperty(id, 'text-halo-width', 1.4);
+      }
+    }
+  }
 
   function load() {
     const css = document.createElement('link');
     css.rel = 'stylesheet';
-    css.href = LEAFLET + 'leaflet.min.css';
+    css.href = LIB + 'maplibre-gl.css';
     document.head.appendChild(css);
     const js = document.createElement('script');
-    js.src = LEAFLET + 'leaflet.min.js';
+    js.src = LIB + 'maplibre-gl.js';
     js.onload = init;
-    js.onerror = () => { el.querySelector('.map__fallback').textContent = 'Карта не загрузилась. Адрес: ул. Цирюльная, 7'; };
+    js.onerror = fail;
     document.head.appendChild(js);
+  }
+  function fail() {
+    el.innerHTML = '<p class="map__fallback">Карта не загрузилась. Адрес: ул. Цирюльная, 7</p>';
   }
 
   function init() {
+    if (!window.maplibregl) return fail();
     el.innerHTML = '';
-    const touch = matchMedia('(pointer: coarse)').matches;
-    const map = L.map(el, {
-      center: [55.0294, 82.9226], zoom: 16,
-      scrollWheelZoom: false,   // колесо мыши крутит страницу, а не карту
-      dragging: !touch,         // на телефоне один палец прокручивает страницу
-      tap: false,
+    const map = new maplibregl.Map({
+      container: el,
+      style: 'https://tiles.openfreemap.org/styles/dark',
+      center: [82.9226, 55.0294], zoom: 15.6,
+      attributionControl: false,
+      cooperativeGestures: true,   // колесо и один палец крутят страницу; карту — Ctrl+колесо или двумя пальцами
+      dragRotate: false, pitchWithRotate: false, touchPitch: false,
+      locale: {
+        'CooperativeGesturesHandler.WindowsHelpText': 'Ctrl + колесо мыши — приблизить карту',
+        'CooperativeGesturesHandler.MacHelpText': '⌘ + колесо мыши — приблизить карту',
+        'CooperativeGesturesHandler.MobileHelpText': 'Двигайте карту двумя пальцами',
+        'NavigationControl.ZoomIn': 'Приблизить',
+        'NavigationControl.ZoomOut': 'Отдалить',
+      },
     });
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(map);
-    map.attributionControl.setPrefix('<a href="https://leafletjs.com">Leaflet</a>');
+    map.touchZoomRotate.disableRotation();
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-left');
+    map.addControl(new maplibregl.AttributionControl({
+      compact: true,
+      customAttribution: '<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
+    }), 'bottom-right');
+    map.on('styledata', () => { if (!map.__styled && map.isStyleLoaded()) { map.__styled = true; restyle(map); } });
+    map.on('error', e => console.warn('Карта:', e && e.error && e.error.message));
+    // подпись источников свёрнута в кнопку «i», чтобы не закрывать карту
+    map.on('load', () => el.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show'));
 
-    const pin = L.divIcon({
-      className: 'map-pin',
-      html: '<svg width="36" height="46" viewBox="0 0 36 46" aria-hidden="true"><path fill="currentColor" d="M18 46s18-15.6 18-28A18 18 0 0 0 0 18c0 12.4 18 28 18 28Z"/><circle cx="18" cy="18" r="7" fill="#171717"/></svg>',
-      iconSize: [36, 46], iconAnchor: [18, 46], popupAnchor: [0, -42],
-    });
-    L.marker(SHOP, { icon: pin, title: 'Опасная бритва' }).addTo(map)
-      .bindPopup('<b>Опасная бритва</b>ул. Цирюльная, 7, вход со двора<br>Ежедневно 10:00–22:00')
-      .openPopup();
+    const pinEl = document.createElement('div');
+    pinEl.className = 'map-pin';
+    pinEl.innerHTML = '<svg width="36" height="46" viewBox="0 0 36 46" aria-hidden="true"><path fill="currentColor" d="M18 46s18-15.6 18-28A18 18 0 0 0 0 18c0 12.4 18 28 18 28Z"/><circle cx="18" cy="18" r="7" fill="#171717"/></svg>';
+    const popup = new maplibregl.Popup({ offset: 44, closeButton: false, className: 'map-popup' })
+      .setHTML('<b>Опасная бритва</b>ул. Цирюльная, 7, вход со двора<br>Ежедневно 10:00–22:00');
+    const shopMarker = new maplibregl.Marker({ element: pinEl, anchor: 'bottom' }).setLngLat(SHOP).setPopup(popup).addTo(map);
+    // пин доступен с клавиатуры: Tab — фокус, Enter — подсказка с адресом
+    pinEl.setAttribute('role', 'button');
+    pinEl.setAttribute('tabindex', '0');
+    pinEl.setAttribute('aria-label', 'Опасная бритва, ул. Цирюльная, 7 — показать адрес');
+    pinEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); shopMarker.togglePopup(); } });
 
-    const metro = L.divIcon({ className: '', html: '<span class="map-metro">М</span>', iconSize: [26, 26], iconAnchor: [13, 13] });
-    L.marker(METRO, { icon: metro, title: 'Метро «Площадь Ленина»', keyboard: false }).addTo(map)
-      .bindTooltip('Метро «Площадь Ленина»', { direction: 'top', offset: [0, -14] });
+    // и метро, и барбершоп всегда в кадре, на любой ширине экрана
+    const fit = () => map.fitBounds([METRO, SHOP], { padding: { top: 70, bottom: 90, left: 60, right: 60 }, maxZoom: 16.3, duration: 0 });
+    map.on('load', fit);
+
+    const metroEl = document.createElement('div');
+    metroEl.innerHTML = '<span class="map-metro" title="Метро «Площадь Ленина»">М</span>';
+    new maplibregl.Marker({ element: metroEl }).setLngLat(METRO).addTo(map);
   }
 
   if (!('IntersectionObserver' in window)) return load();
